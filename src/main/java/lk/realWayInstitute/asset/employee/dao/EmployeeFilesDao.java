@@ -1,8 +1,7 @@
-package lk.samarasingher_super.asset.employee.dao;
+package lk.realWayInstitute.asset.employee.dao;
 
-
-import lk.samarasingher_super.asset.employee.entity.Employee;
-import lk.samarasingher_super.asset.employee.entity.EmployeeFiles;
+import lk.realWayInstitute.asset.employee.entity.Employee;
+import lk.realWayInstitute.asset.employee.entity.EmployeeFiles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

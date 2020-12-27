@@ -1,18 +1,17 @@
-package lk.samarasingher_super.asset.employee.controller;
+package lk.realWayInstitute.asset.employee.controller;
 
-
-import lk.samarasingher_super.asset.common_asset.model.enums.*;
-import lk.samarasingher_super.asset.common_asset.service.CommonService;
-import lk.samarasingher_super.asset.employee.entity.Employee;
-import lk.samarasingher_super.asset.employee.entity.EmployeeFiles;
-import lk.samarasingher_super.asset.employee.entity.enums.Designation;
-import lk.samarasingher_super.asset.employee.entity.enums.EmployeeStatus;
-import lk.samarasingher_super.asset.employee.service.EmployeeFilesService;
-import lk.samarasingher_super.asset.employee.service.EmployeeService;
-import lk.samarasingher_super.asset.user_management.user.entity.User;
-import lk.samarasingher_super.asset.user_management.user.service.UserService;
-import lk.samarasingher_super.util.service.DateTimeAgeService;
-import lk.samarasingher_super.util.service.MakeAutoGenerateNumberService;
+import lk.realWayInstitute.asset.commonAsset.model.Enum.*;
+import lk.realWayInstitute.asset.commonAsset.service.CommonService;
+import lk.realWayInstitute.asset.employee.entity.Employee;
+import lk.realWayInstitute.asset.employee.entity.EmployeeFiles;
+import lk.realWayInstitute.asset.employee.entity.enums.Designation;
+import lk.realWayInstitute.asset.employee.entity.enums.EmployeeStatus;
+import lk.realWayInstitute.asset.employee.service.EmployeeFilesService;
+import lk.realWayInstitute.asset.employee.service.EmployeeService;
+import lk.realWayInstitute.asset.userManagement.entity.User;
+import lk.realWayInstitute.asset.userManagement.service.UserService;
+import lk.realWayInstitute.util.service.DateTimeAgeService;
+import lk.realWayInstitute.util.service.MakeAutoGenerateNumberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

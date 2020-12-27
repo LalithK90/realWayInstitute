@@ -1,7 +1,7 @@
-package lk.samarasingher_super.asset.employee.entity;
+package lk.realWayInstitute.asset.employee.entity;
 
-
-import lk.samarasingher_super.util.audit.AuditEntity;
+import lk.realWayInstitute.asset.employee.entity.Employee;
+import lk.realWayInstitute.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

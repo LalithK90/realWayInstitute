@@ -1,14 +1,14 @@
-package lk.samarasingher_super.asset.employee.entity;
+package lk.realWayInstitute.asset.employee.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import lk.samarasingher_super.asset.common_asset.model.FileInfo;
-import lk.samarasingher_super.asset.common_asset.model.enums.LiveDead;
-import lk.samarasingher_super.asset.common_asset.model.enums.CivilStatus;
-import lk.samarasingher_super.asset.common_asset.model.enums.Gender;
-import lk.samarasingher_super.asset.common_asset.model.enums.Title;
-import lk.samarasingher_super.asset.employee.entity.enums.Designation;
-import lk.samarasingher_super.asset.employee.entity.enums.EmployeeStatus;
-import lk.samarasingher_super.util.audit.AuditEntity;
+import lk.realWayInstitute.asset.commonAsset.model.Enum.CivilStatus;
+import lk.realWayInstitute.asset.commonAsset.model.Enum.Gender;
+import lk.realWayInstitute.asset.commonAsset.model.Enum.LiveDead;
+import lk.realWayInstitute.asset.commonAsset.model.Enum.Title;
+import lk.realWayInstitute.asset.commonAsset.model.FileInfo;
+import lk.realWayInstitute.asset.employee.entity.enums.Designation;
+import lk.realWayInstitute.asset.employee.entity.enums.EmployeeStatus;
+import lk.realWayInstitute.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
