@@ -1,8 +1,8 @@
-package lk.realWayInstitute.asset.employee.dao;
+package lk.samarasingher_super.asset.employee.dao;
 
 
-import lk.realWayInstitute.asset.employee.entity.Employee;
-import lk.realWayInstitute.asset.employee.entity.EmployeeFiles;
+import lk.samarasingher_super.asset.employee.entity.Employee;
+import lk.samarasingher_super.asset.employee.entity.EmployeeFiles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +17,6 @@ public interface EmployeeFilesDao extends JpaRepository< EmployeeFiles, Integer 
     EmployeeFiles findByNewName(String filename);
 
     EmployeeFiles findByNewId(String filename);
+
+    EmployeeFiles findByEmployee(Employee employee);
 }
