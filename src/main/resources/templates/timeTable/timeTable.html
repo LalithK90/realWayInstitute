@@ -6,19 +6,22 @@
     <title>Success TimeTable Management</title>
 </head>
 <body>
+
 <!--Nav bar is included-->
 <nav data-th-replace="~{fragments/navBar :: navBarFragment}"></nav>
 
-<div class="row bg-secondary">
+<div class="row bg-link">
+    <div class="col-4">
+
+    </div>
+    <div class="col-4">
+        <h1>Timetable Management</h1>
+    </div>
     <div class="col-4">
         <a href="/timeTable/add">
-            <button class="btn btn-primary">New TimeTable</button>
+            <button class="btn btn-primary" align="center">Add new time slot</button>
         </a>
     </div>
-    <div class="col-4">
-        <h1>TimeTable Management</h1>
-    </div>
-    <div class="col-4"></div>
 </div>
 
 <div class="container-fluid">
@@ -26,12 +29,12 @@
         <thead class="thead-inverse">
         <tr>
             <th>Index</th>
-            <th>code</th>
+            <th>Code</th>
             <th>Lesson</th>
             <th>Start Time</th>
             <th>End Time</th>
             <th>Active/Not</th>
-            <th>Hall Name</th>
+            <th>Hall Number</th>
             <th>Batch Name</th>
             <th>Modify</th>
         </tr>
@@ -44,7 +47,7 @@
             <td data-th-text="${#temporals.format(timeTable.startAt, 'dd-MM-yyyy HH:mm')}"></td>
             <td data-th-text="${#temporals.format(timeTable.endAt, 'dd-MM-yyyy HH:mm')}"></td>
             <td data-th-text="${timeTable.liveDead.liveDead}"></td>
-            <td data-th-text="${timeTable.hall.name}"></td>
+            <td data-th-text="${timeTable.hall.number}"></td>
             <td data-th-text="${timeTable.batch.name}"></td>
             <td>
                 <a data-th-href="${'/timeTable/view/'+ timeTable.id}"><button class="btn btn-info">View</button></a>

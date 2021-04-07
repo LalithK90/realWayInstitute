@@ -14,7 +14,7 @@
     <div class="col-4">
     </div>
     <div class="col-4">
-        <h1>Add a Hall</h1>
+        <h1>Add new Hall</h1>
     </div>
     <div class="col-4">
         <a href="/hall">
@@ -33,12 +33,6 @@
                 <input type="text" data-th-if="${addStatus==false}" data-th-field="*{liveDead}" i placeholder="Hall Number" class="form-control" autofocus hidden>
 
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label" data-th-for="${number}">Hall Name</label>
-            <div class="col-sm-5">
-                <input type="text" data-th-field="*{name}"  placeholder="Hall Name" class="form-control" autofocus>
-                 </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label" data-th-for="${seatCount}">Seating Count</label>
@@ -76,7 +70,7 @@
 
         <div class="row container-fluid">
             <div class="col-sm-2 col-sm-offset-2">
-                <button type="link" class="btn btn-danger btn-block">Back</button>
+              <a href="/hall"><button type="button" class="btn btn-danger btn-block">Back</button></a>
             </div>
 
             <div class="col-sm-2 col-sm-offset-2">

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping( "/student" )
+  @RequestMapping( "/student" )
 public class StudentController implements AbstractController< Student, Integer > {
   private final StudentService studentService;
   private final BatchStudentService batchStudentService;
@@ -67,6 +67,7 @@ public class StudentController implements AbstractController< Student, Integer >
 
   @GetMapping( "/add" )
   public String form(Model model) {
+
     return commonThing(model, new Student(), true);
   }
 
@@ -88,7 +89,6 @@ public class StudentController implements AbstractController< Student, Integer >
       return commonThing(model, student, true);
     }
 
-    student.getBatchStudents().forEach(batchStudentService::persist);
 //there are two different situation
     //1. new Student -> need to generate new number
     //2. update student -> no required to generate number
@@ -103,6 +103,10 @@ public class StudentController implements AbstractController< Student, Integer >
       }
     }
     studentService.persist(student);
+    student.getBatchStudents().forEach(x -> {
+      x.setStudent(student);
+      batchStudentService.persist(x);
+    });
     return "redirect:/student";
 
   }
@@ -113,7 +117,7 @@ public class StudentController implements AbstractController< Student, Integer >
     return "redirect:/student";
   }
 
-  @PostMapping("/search")
+  @PostMapping( "/search" )
   public String search(@ModelAttribute Student student, Model model) {
     List< Student > students = studentService.search(student);
 
