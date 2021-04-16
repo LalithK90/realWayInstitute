@@ -3,7 +3,6 @@ package lk.real_way_institute.asset.user_management.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lk.real_way_institute.asset.employee.entity.Employee;
 import lk.real_way_institute.asset.student.entity.Student;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
 import lk.real_way_institute.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,8 +29,6 @@ public class User extends AuditEntity {
     @OneToOne
     private Student student;
 
-    @OneToOne
-    private Teacher teacher;
 
     @Column(nullable = false,unique = true)
     @Size(min = 5, message = "user name should include at least five characters")

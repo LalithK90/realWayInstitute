@@ -6,7 +6,6 @@ import lk.real_way_institute.asset.batch.entity.enums.Grade;
 import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
 import lk.real_way_institute.asset.common_asset.model.enums.Gender;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
-import lk.real_way_institute.asset.school.service.SchoolService;
 import lk.real_way_institute.asset.student.entity.Student;
 import lk.real_way_institute.asset.student.service.StudentService;
 import lk.real_way_institute.util.interfaces.AbstractController;
@@ -27,17 +26,15 @@ import java.util.stream.Collectors;
 public class StudentController implements AbstractController< Student, Integer > {
   private final StudentService studentService;
   private final BatchStudentService batchStudentService;
-  private final SchoolService schoolService;
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
 
-  public StudentController(StudentService studentService,
-                           BatchStudentService batchStudentService, SchoolService schoolService,
+  public StudentController(StudentService studentService, BatchStudentService batchStudentService,
                            MakeAutoGenerateNumberService makeAutoGenerateNumberService) {
     this.studentService = studentService;
     this.batchStudentService = batchStudentService;
-    this.schoolService = schoolService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
   }
+
 
   @GetMapping
   public String findAll(Model model) {
@@ -54,9 +51,7 @@ public class StudentController implements AbstractController< Student, Integer >
     model.addAttribute("addStatus", addStatus);
     model.addAttribute("grades", Grade.values());
     model.addAttribute("liveDeads", LiveDead.values());
-    model.addAttribute("schools", schoolService.findAll().stream()
-        .filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE))
-        .collect(Collectors.toList()));
+
     model.addAttribute("gender", Gender.values());
     model.addAttribute("batchUrl", MvcUriComponentsBuilder
         .fromMethodName(BatchController.class, "findByGrade", "")

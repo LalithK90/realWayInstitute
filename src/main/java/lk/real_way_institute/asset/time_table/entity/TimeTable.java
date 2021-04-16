@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import lk.real_way_institute.asset.batch.entity.Batch;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.time_table.entity.enums.TimeTableStatus;
-import lk.real_way_institute.asset.time_table_student_attendence.entity.TimeTableStudentAttendance;
 import lk.real_way_institute.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +31,7 @@ public class TimeTable extends AuditEntity {
 
   private String remark;
 
-  @Enumerated(EnumType.STRING)
+  @Enumerated( EnumType.STRING )
   private TimeTableStatus timeTableStatus;
 
   @DateTimeFormat( pattern = "yyyy-MM-dd'T'HH:mm" )
@@ -47,7 +46,4 @@ public class TimeTable extends AuditEntity {
   @ManyToOne
   private Batch batch;
 
-
-  @OneToMany( mappedBy = "timeTable", cascade = CascadeType.PERSIST )
-  private List< TimeTableStudentAttendance > timeTableStudentAttendances;
 }

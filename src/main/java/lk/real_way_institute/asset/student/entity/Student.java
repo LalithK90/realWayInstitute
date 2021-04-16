@@ -6,7 +6,6 @@ import lk.real_way_institute.asset.batch.entity.enums.Grade;
 import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
 import lk.real_way_institute.asset.common_asset.model.enums.Gender;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
-import lk.real_way_institute.asset.school.entity.School;
 import lk.real_way_institute.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,8 +56,6 @@ public class Student extends AuditEntity {
   @Enumerated( EnumType.STRING )
   private Grade grade;
 
-  @ManyToOne
-  private School school;
 
   @OneToMany(mappedBy = "student",cascade ={ CascadeType.MERGE, CascadeType.PERSIST})
   private List< BatchStudent > batchStudents;

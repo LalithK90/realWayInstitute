@@ -2,7 +2,6 @@ package lk.real_way_institute.asset.user_management.service;
 
 import lk.real_way_institute.asset.employee.entity.Employee;
 import lk.real_way_institute.asset.student.entity.Student;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
 import lk.real_way_institute.asset.user_management.dao.UserDao;
 import lk.real_way_institute.asset.user_management.entity.User;
 import lk.real_way_institute.util.interfaces.AbstractService;
@@ -88,19 +87,12 @@ public class UserService implements AbstractService< User, Integer > {
     return userDao.findByEmployee(employee) == null;
   }
 
-  @Cacheable
-  public boolean findByTeacher(Teacher teacher) {
-    return userDao.findByTeacher(teacher) == null;
-  }
 
   @Cacheable
   public boolean findByStudent(Student student) {
     return userDao.findByStudent(student) == null;
   }
 
-  public User findUserByTeacher(Teacher teacher) {
-    return userDao.findByTeacher(teacher);
-  }
 
   public User findUserByStudent(Student student) {
     return userDao.findByStudent(student);

@@ -102,7 +102,7 @@ public class PaymentController {
           newPayment.setPaymentStatus(PaymentStatus.NO_PAID);
           newPayment.setLiveDead(LiveDead.STOP);
           newPayment.setBatchStudent(y);
-          newPayment.setAmount(y.getBatch().getTeacher().getFee());
+         // newPayment.setAmount(y.getBatch().getTeacher().getFee());
           newPayment.setMonth(x);
           newPayment.setYear(year);
           payments.add(newPayment);

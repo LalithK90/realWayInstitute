@@ -6,12 +6,9 @@ import lk.real_way_institute.asset.employee.entity.enums.EmployeeStatus;
 import lk.real_way_institute.asset.employee.service.EmployeeService;
 import lk.real_way_institute.asset.student.entity.Student;
 import lk.real_way_institute.asset.student.service.StudentService;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
-import lk.real_way_institute.asset.teacher.service.TeacherService;
 import lk.real_way_institute.asset.user_management.entity.User;
 import lk.real_way_institute.asset.user_management.service.RoleService;
 import lk.real_way_institute.asset.user_management.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,19 +25,16 @@ public class UserController {
   private final UserService userService;
   private final RoleService roleService;
   private final EmployeeService employeeService;
-  private final TeacherService teacherService;
   private final StudentService studentService;
 
-
-  @Autowired
-  public UserController(UserService userService, EmployeeService employeeService, RoleService roleService,
-                        TeacherService teacherService, StudentService studentService) {
+  public UserController(UserService userService, RoleService roleService, EmployeeService employeeService,
+                        StudentService studentService) {
     this.userService = userService;
-    this.employeeService = employeeService;
     this.roleService = roleService;
-    this.teacherService = teacherService;
+    this.employeeService = employeeService;
     this.studentService = studentService;
   }
+
 
   @GetMapping
   public String userPage(Model model) {
@@ -67,10 +61,6 @@ public class UserController {
     //employee
     if ( user.getEmployee() != null ) {
       model.addAttribute("employee", user.getEmployee());
-    }
-    //teacher
-    if ( user.getTeacher() != null ) {
-      model.addAttribute("teacher", user.getTeacher());
     }
     //student
     if ( user.getStudent() != null ) {
@@ -127,10 +117,7 @@ public class UserController {
         ObjectError error = new ObjectError("employee", "This employee already defined as a user");
         result.addError(error);
       }
-      if ( user.getTeacher() != null && userService.findUserByTeacher(user.getTeacher()) != null ) {
-        ObjectError error = new ObjectError("teacher", "This teacher already defined as a user");
-        result.addError(error);
-      }
+
       if ( user.getStudent() != null && userService.findUserByStudent(user.getStudent()) != null ) {
         ObjectError error = new ObjectError("student", "This teacher student defined as a user");
         result.addError(error);
@@ -175,40 +162,6 @@ public class UserController {
     return "user/user-detail";
   }
 
-  @GetMapping( value = "/teacherAdd" )
-  public String userTeacherAddFrom(Model model) {
-    model.addAttribute("addStatus", true);
-    model.addAttribute("employeeDetailShow", false);
-    model.addAttribute("teacher", new Teacher());
-    return "user/addUserTeacher";
-  }
-
-  @PostMapping( value = "/teacher" )
-  public String addUserTeacherDetails(@ModelAttribute( "teacher" ) Teacher teacher, Model model) {
-
-    List< Teacher > teachers = teacherService.search(teacher)
-        .stream()
-        .filter(userService::findByTeacher)
-        .collect(Collectors.toList());
-
-    if ( teachers.size() == 1 ) {
-      User user = new User();
-      user.setTeacher(teachers.get(0));
-      model.addAttribute("user", user);
-      model.addAttribute("teacher", teachers.get(0));
-      model.addAttribute("addStatus", true);
-      return commonCode(model);
-    }
-    model.addAttribute("addStatus", true);
-    model.addAttribute("teacher", new Teacher());
-    model.addAttribute("employeeDetailShow", false);
-    model.addAttribute("employeeNotFoundShow", true);
-    model.addAttribute("employeeNotFound", "There is not teacher in the system according to the provided details" +
-        " or that teacher already be a user in the system" +
-        " \n Could you please search again !!");
-
-    return "user/addUserTeacher";
-  }
 
   @GetMapping( value = "/studentAdd" )
   public String userStudentAddFrom(Model model) {

@@ -6,7 +6,6 @@ import lk.real_way_institute.asset.batch_student_exam_result.entity.BatchStudent
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.payment.entity.Payment;
 import lk.real_way_institute.asset.student.entity.Student;
-import lk.real_way_institute.asset.time_table_student_attendence.entity.TimeTableStudentAttendance;
 import lk.real_way_institute.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,7 +38,5 @@ public class BatchStudent extends AuditEntity {
   @OneToMany( mappedBy = "batchStudent" )
   private List< BatchStudentExamResult > batchStudentExamResults;
 
-  @OneToMany(mappedBy = "batchStudent")
-  private List< TimeTableStudentAttendance > timeTableStudentAttendances;
 
 }

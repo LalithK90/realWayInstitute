@@ -3,7 +3,6 @@ package lk.real_way_institute.asset.subject.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
 import lk.real_way_institute.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,9 +29,6 @@ public class Subject extends AuditEntity {
 
   @Enumerated( EnumType.STRING )
   private LiveDead liveDead;
-
-  @OneToMany( mappedBy = "subject" )
-  private List< Teacher > teachers;
 
 
 }

@@ -8,8 +8,6 @@ import lk.real_way_institute.asset.batch_exam.service.BatchExamService;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.student.entity.Student;
 import lk.real_way_institute.asset.student.service.StudentService;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
-import lk.real_way_institute.asset.teacher.service.TeacherService;
 import lk.real_way_institute.asset.user_management.entity.User;
 import lk.real_way_institute.asset.user_management.service.UserService;
 import lk.real_way_institute.util.service.EmailService;
@@ -29,23 +27,21 @@ public class BatchExamController {
   private final BatchService batchService;
   private final BatchExamService batchExamService;
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
-  private final TeacherService teacherService;
+
   private final UserService userService;
   private final StudentService studentService;
   private final EmailService emailService;
 
   public BatchExamController(BatchService batchService, BatchExamService batchExamService,
-                             MakeAutoGenerateNumberService makeAutoGenerateNumberService,
-                             TeacherService teacherService, UserService userService, StudentService studentService,
-                             EmailService emailService) {
+                             MakeAutoGenerateNumberService makeAutoGenerateNumberService, UserService userService, StudentService studentService, EmailService emailService) {
     this.batchService = batchService;
     this.batchExamService = batchExamService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
-    this.teacherService = teacherService;
     this.userService = userService;
     this.studentService = studentService;
     this.emailService = emailService;
   }
+
 
   @GetMapping
   public String findAll(Model model) {
@@ -58,19 +54,13 @@ public class BatchExamController {
   public String findByTeacher(Model model) {
     User user = userService.findByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
 
-    if ( user.getTeacher() != null ) {
-      model.addAttribute("batchExams",
-                         batchExamService.findAll()
-                             .stream()
-                             .filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE) && x.getBatch().getTeacher().equals(user.getTeacher()))
-                             .collect(Collectors.toList()));
-    } else {
+
       model.addAttribute("batchExams",
                          batchExamService.findAll()
                              .stream()
                              .filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE))
                              .collect(Collectors.toList()));
-    }
+
     return "batchExam/batchExam";
   }
 
@@ -89,10 +79,10 @@ public class BatchExamController {
   @GetMapping( "/view/{id}" )
   public String findById(@PathVariable Integer id, Model model) {
     BatchExam batchExam = batchExamService.findById(id);
-    Teacher teacher = teacherService.findById(batchExam.getBatch().getTeacher().getId());
-    model.addAttribute("teacherDetail", teacher);
+   /* Teacher teacher = teacherService.findById(batchExam.getBatch().getTeacher().getId());
+    model.addAttribute("teacherDetail", teacher);*/
     model.addAttribute("batchExamDetail", batchExam);
-    model.addAttribute("subjectDetail", teacher.getSubject());
+//    model.addAttribute("subjectDetail", teacher.getSubject());
     return "batchExam/batchExam-detail";
   }
 

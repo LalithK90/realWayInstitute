@@ -70,7 +70,6 @@ public class BatchStudentController {
   private void common(Integer id, Model model, boolean addStatus) {
     Batch batch = batchService.findById(id);
     model.addAttribute("batchDetail", batch);
-    model.addAttribute("teacherDetail", batch.getTeacher());
     //already registered student on this batch
     List< Student > registeredStudent = new ArrayList<>();
     batch.getBatchStudents()

@@ -8,7 +8,6 @@ import lk.real_way_institute.asset.batch.entity.enums.Grade;
 import lk.real_way_institute.asset.batch_exam.entity.BatchExam;
 import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
 import lk.real_way_institute.asset.time_table.entity.TimeTable;
 import lk.real_way_institute.util.audit.AuditEntity;
 import lombok.*;
@@ -51,8 +50,6 @@ public class Batch extends AuditEntity {
   @DateTimeFormat( pattern = "HH:mm" )
   private LocalTime endAt;
 
-  @ManyToOne( fetch = FetchType.EAGER )
-  private Teacher teacher;
 
   @OneToMany( mappedBy = "batch" )
   private List< BatchStudent > batchStudents;

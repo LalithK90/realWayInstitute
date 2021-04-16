@@ -10,8 +10,6 @@ import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.student.entity.Student;
 import lk.real_way_institute.asset.student.service.StudentService;
 import lk.real_way_institute.asset.subject.service.SubjectService;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
-import lk.real_way_institute.asset.teacher.service.TeacherService;
 import lk.real_way_institute.asset.time_table.entity.TimeTable;
 import lk.real_way_institute.asset.time_table.service.TimeTableService;
 import lk.real_way_institute.asset.user_management.entity.User;
@@ -40,7 +38,6 @@ import java.util.stream.Collectors;
 public class TimeTableController {
   private final TimeTableService timeTableService;
   private final SubjectService subjectService;
-  private final TeacherService teacherService;
   private final BatchService batchService;
   private final BatchStudentService batchStudentService;
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
@@ -51,14 +48,13 @@ public class TimeTableController {
 
 
   public TimeTableController(TimeTableService timeTableService,
-                             SubjectService subjectService, TeacherService teacherService, BatchService batchService,
+                             SubjectService subjectService,  BatchService batchService,
                              BatchStudentService batchStudentService,
                              MakeAutoGenerateNumberService makeAutoGenerateNumberService,
                              DateTimeAgeService dateTimeAgeService, UserService userService,
                              StudentService studentService, EmailService emailService) {
     this.timeTableService = timeTableService;
     this.subjectService = subjectService;
-    this.teacherService = teacherService;
     this.batchService = batchService;
     this.batchStudentService = batchStudentService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
@@ -85,11 +81,7 @@ public class TimeTableController {
   public String byTeacher(Model model) {
     User authUser = userService.findByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
 
-    Teacher teacher = new Teacher();
-    List< TimeTable > timeTables = timeTableService.findAll()
-        .stream()
-        .filter(x -> x.getBatch().getTeacher().equals(teacher))
-        .collect(Collectors.toList());
+    List< TimeTable > timeTables = timeTableService.findAll();
 
     return common(timeTables, model);
   }

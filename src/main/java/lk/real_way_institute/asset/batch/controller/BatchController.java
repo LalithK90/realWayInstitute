@@ -13,8 +13,6 @@ import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
 import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.student.service.StudentService;
-import lk.real_way_institute.asset.teacher.controller.TeacherController;
-import lk.real_way_institute.asset.teacher.service.TeacherService;
 import lk.real_way_institute.util.interfaces.AbstractController;
 import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -35,16 +33,13 @@ import java.util.stream.Collectors;
 @RequestMapping( "/batch" )
 public class BatchController implements AbstractController< Batch, Integer > {
   private final BatchService batchService;
-  private final TeacherService teacherService;
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
   private final StudentService studentService;
   private final BatchStudentService batchStudentService;
 
-  public BatchController(BatchService batchService, TeacherService teacherService,
-                         MakeAutoGenerateNumberService makeAutoGenerateNumberService, StudentService studentService,
-                         BatchStudentService batchStudentService) {
+  public BatchController(BatchService batchService, MakeAutoGenerateNumberService makeAutoGenerateNumberService,
+                         StudentService studentService, BatchStudentService batchStudentService) {
     this.batchService = batchService;
-    this.teacherService = teacherService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
     this.studentService = studentService;
     this.batchStudentService = batchStudentService;
@@ -61,13 +56,8 @@ public class BatchController implements AbstractController< Batch, Integer > {
   private String commonMethod(Model model, Batch batch, boolean addStatus) {
     model.addAttribute("grades", Grade.values());
     model.addAttribute("classDays", ClassDay.values());
-    model.addAttribute("teachers", teacherService.findAll());
     model.addAttribute("batch", batch);
     model.addAttribute("addStatus", addStatus);
-    model.addAttribute("subjectUrl", MvcUriComponentsBuilder
-        .fromMethodName(TeacherController.class, "findId", "")
-        .build()
-        .toString());
     return "batch/addBatch";
   }
 
@@ -181,7 +171,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
   @GetMapping( "/id/{id}" )
   @ResponseBody
   public MappingJacksonValue findById(@PathVariable( "id" ) Integer id) {
-    MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(batchService.findById(id).getTeacher());
+    MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(batchService.findById(id));
 
     SimpleBeanPropertyFilter forTeacher = SimpleBeanPropertyFilter
         .filterOutAllExcept("id", "firstName", "fee");

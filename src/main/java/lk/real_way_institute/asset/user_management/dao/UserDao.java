@@ -3,7 +3,6 @@ package lk.real_way_institute.asset.user_management.dao;
 
 import lk.real_way_institute.asset.employee.entity.Employee;
 import lk.real_way_institute.asset.student.entity.Student;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
 import lk.real_way_institute.asset.user_management.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,7 +22,6 @@ public interface UserDao extends JpaRepository< User, Integer > {
 
   User findByEmployee(Employee employee);
 
-  User findByTeacher(Teacher teacher);
 
   User findByStudent(Student student);
 
