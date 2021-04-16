@@ -4,18 +4,18 @@ package lk.real_way_institute.asset.batch.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import lk.real_way_institute.asset.batch.entity.Batch;
-import lk.real_way_institute.asset.batch.entity.enums.ClassDay;
-import lk.real_way_institute.asset.batch.entity.enums.Grade;
-import lk.real_way_institute.asset.batch.service.BatchService;
-import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
-import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
-import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
-import lk.real_way_institute.asset.student.service.StudentService;
-import lk.real_way_institute.asset.teacher.controller.TeacherController;
-import lk.real_way_institute.asset.teacher.service.TeacherService;
-import lk.real_way_institute.util.interfaces.AbstractController;
-import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
+import lk.succes_student_management.asset.batch.entity.Batch;
+import lk.succes_student_management.asset.batch.entity.enums.ClassDay;
+import lk.succes_student_management.asset.batch.entity.enums.Grade;
+import lk.succes_student_management.asset.batch.service.BatchService;
+import lk.succes_student_management.asset.batch_student.entity.BatchStudent;
+import lk.succes_student_management.asset.batch_student.service.BatchStudentService;
+import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
+import lk.succes_student_management.asset.student.service.StudentService;
+import lk.succes_student_management.asset.teacher.controller.TeacherController;
+import lk.succes_student_management.asset.teacher.service.TeacherService;
+import lk.succes_student_management.util.interfaces.AbstractController;
+import lk.succes_student_management.util.service.MakeAutoGenerateNumberService;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -117,6 +117,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
     }
 
     batchService.persist(batch);
+
     return "redirect:/batch";
 
   }
@@ -147,7 +148,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
   @ResponseBody
   public MappingJacksonValue findByGradeAndStudent(@PathVariable( "grade" ) Grade grade,
                                                    @PathVariable( "id" ) Integer id) {
-    List< BatchStudent > batchStudents = batchStudentService.findByStudent(studentService.findById(id));
+    List<BatchStudent> batchStudents = batchStudentService.findByStudent(studentService.findById(id));
     List< Batch > notAssignBatch = new ArrayList<>();
     List< Batch > batches = batchService.findByGrade(grade);
 

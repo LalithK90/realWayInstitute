@@ -1,8 +1,8 @@
 package lk.real_way_institute.asset.batch_student.dao;
 
-import lk.real_way_institute.asset.batch.entity.Batch;
-import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
-import lk.real_way_institute.asset.student.entity.Student;
+import lk.succes_student_management.asset.batch.entity.Batch;
+import lk.succes_student_management.asset.batch_student.entity.BatchStudent;
+import lk.succes_student_management.asset.student.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

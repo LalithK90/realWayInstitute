@@ -1,7 +1,7 @@
 package lk.real_way_institute.asset.batch_student_exam_result.dao;
 
 
-import lk.real_way_institute.asset.batch_student_exam_result.entity.BatchStudentExamResult;
+import lk.succes_student_management.asset.batch_student_exam_result.entity.BatchStudentExamResult;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

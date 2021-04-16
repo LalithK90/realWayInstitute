@@ -2,14 +2,14 @@ package lk.real_way_institute.asset.batch.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import lk.real_way_institute.asset.batch.entity.enums.ClassDay;
-import lk.real_way_institute.asset.batch.entity.enums.Grade;
-import lk.real_way_institute.asset.batch_exam.entity.BatchExam;
-import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
-import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
-import lk.real_way_institute.asset.time_table.entity.TimeTable;
-import lk.real_way_institute.util.audit.AuditEntity;
+import lk.succes_student_management.asset.batch.entity.enums.ClassDay;
+import lk.succes_student_management.asset.batch.entity.enums.Grade;
+import lk.succes_student_management.asset.batch_exam.entity.BatchExam;
+import lk.succes_student_management.asset.batch_student.entity.BatchStudent;
+import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
+import lk.succes_student_management.asset.teacher.entity.Teacher;
+import lk.succes_student_management.asset.time_table.entity.TimeTable;
+import lk.succes_student_management.util.audit.AuditEntity;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 

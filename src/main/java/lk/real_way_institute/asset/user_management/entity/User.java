@@ -1,10 +1,10 @@
 package lk.real_way_institute.asset.user_management.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lk.real_way_institute.asset.employee.entity.Employee;
-import lk.real_way_institute.asset.student.entity.Student;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
-import lk.real_way_institute.util.audit.AuditEntity;
+import lk.succes_student_management.asset.employee.entity.Employee;
+import lk.succes_student_management.asset.student.entity.Student;
+import lk.succes_student_management.asset.teacher.entity.Teacher;
+import lk.succes_student_management.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

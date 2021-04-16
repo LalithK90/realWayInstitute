@@ -1,6 +1,6 @@
 package lk.real_way_institute.configuration;
 
-import lk.real_way_institute.asset.user_management.service.UserDetailsServiceImpl;
+import lk.succes_student_management.asset.user_management.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(ALL_PERMIT_URL).permitAll()
                     //this is used the normal admin to give access every url mapping
                     .antMatchers("/category/**").hasAnyRole("ADMIN", "MANAGER")
-
+//todo: security configuration
                     .anyRequest()
                     .authenticated())
         // Login form

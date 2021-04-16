@@ -2,18 +2,20 @@ package lk.real_way_institute.asset.payment.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
-import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
-import lk.real_way_institute.asset.payment.entity.enums.PaymentStatus;
-import lk.real_way_institute.util.audit.AuditEntity;
+import lk.succes_student_management.asset.batch_student.entity.BatchStudent;
+import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
+import lk.succes_student_management.asset.payment.entity.enums.PaymentStatus;
+import lk.succes_student_management.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Month;
+import java.time.Year;
 
 @Entity
 @Getter
@@ -27,6 +29,9 @@ public class Payment extends AuditEntity {
     private String code;
 
     private BigDecimal amount;
+
+    @DateTimeFormat( pattern = "yyyy" )
+    private Year year;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;

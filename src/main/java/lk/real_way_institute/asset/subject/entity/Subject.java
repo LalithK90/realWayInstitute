@@ -2,9 +2,9 @@ package lk.real_way_institute.asset.subject.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
-import lk.real_way_institute.asset.teacher.entity.Teacher;
-import lk.real_way_institute.util.audit.AuditEntity;
+import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
+import lk.succes_student_management.asset.teacher.entity.Teacher;
+import lk.succes_student_management.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

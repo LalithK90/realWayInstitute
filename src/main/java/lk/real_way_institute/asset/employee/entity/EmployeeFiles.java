@@ -1,7 +1,7 @@
 package lk.real_way_institute.asset.employee.entity;
 
 
-import lk.real_way_institute.util.audit.AuditEntity;
+import lk.succes_student_management.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

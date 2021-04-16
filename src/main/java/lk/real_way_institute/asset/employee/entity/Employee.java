@@ -1,14 +1,14 @@
 package lk.real_way_institute.asset.employee.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import lk.real_way_institute.asset.common_asset.model.FileInfo;
-import lk.real_way_institute.asset.common_asset.model.enums.CivilStatus;
-import lk.real_way_institute.asset.common_asset.model.enums.Gender;
-import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
-import lk.real_way_institute.asset.common_asset.model.enums.Title;
-import lk.real_way_institute.asset.employee.entity.enums.Designation;
-import lk.real_way_institute.asset.employee.entity.enums.EmployeeStatus;
-import lk.real_way_institute.util.audit.AuditEntity;
+import lk.succes_student_management.asset.common_asset.model.FileInfo;
+import lk.succes_student_management.asset.common_asset.model.enums.CivilStatus;
+import lk.succes_student_management.asset.common_asset.model.enums.Gender;
+import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
+import lk.succes_student_management.asset.common_asset.model.enums.Title;
+import lk.succes_student_management.asset.employee.entity.enums.Designation;
+import lk.succes_student_management.asset.employee.entity.enums.EmployeeStatus;
+import lk.succes_student_management.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
