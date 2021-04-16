@@ -6,12 +6,13 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 import lk.real_way_institute.asset.batch.entity.Batch;
-import lk.real_way_institute.asset.batch.entity.enums.ClassDay;
 import lk.real_way_institute.asset.batch.entity.enums.Grade;
 import lk.real_way_institute.asset.batch.service.BatchService;
 import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
 import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.employee.entity.enums.Designation;
+import lk.real_way_institute.asset.employee.service.EmployeeService;
 import lk.real_way_institute.asset.student.service.StudentService;
 import lk.real_way_institute.util.interfaces.AbstractController;
 import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
@@ -21,7 +22,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -33,13 +33,15 @@ import java.util.stream.Collectors;
 @RequestMapping( "/batch" )
 public class BatchController implements AbstractController< Batch, Integer > {
   private final BatchService batchService;
+  private final EmployeeService employeeService;
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
   private final StudentService studentService;
   private final BatchStudentService batchStudentService;
 
-  public BatchController(BatchService batchService, MakeAutoGenerateNumberService makeAutoGenerateNumberService,
+  public BatchController(BatchService batchService, EmployeeService employeeService, MakeAutoGenerateNumberService makeAutoGenerateNumberService,
                          StudentService studentService, BatchStudentService batchStudentService) {
     this.batchService = batchService;
+    this.employeeService = employeeService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
     this.studentService = studentService;
     this.batchStudentService = batchStudentService;
@@ -54,8 +56,9 @@ public class BatchController implements AbstractController< Batch, Integer > {
   }
 
   private String commonMethod(Model model, Batch batch, boolean addStatus) {
-    model.addAttribute("grades", Grade.values());
-    model.addAttribute("classDays", ClassDay.values());
+   // model.addAttribute("employees",employeeService.findByDesignation(Designation.INSTRUCTOR));
+    //todo : for demo remove above ones and delete below one
+    model.addAttribute("employees",employeeService.findAll());
     model.addAttribute("batch", batch);
     model.addAttribute("addStatus", addStatus);
     return "batch/addBatch";
@@ -82,7 +85,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
                         RedirectAttributes redirectAttributes, Model model) {
     if ( batch.getId() == null ) {
       Batch batchDbDayAndStartAndEndTime =
-          batchService.findByYearAndClassDayAndStartAtIsBetweenAndEndAtIsBetween(batch.getYear(), batch.getClassDay()
+          batchService.findByNameAndStartAtIsBetweenAndEndAtIsBetween(batch.getName()
               , batch.getStartAt(), batch.getEndAt(), batch.getStartAt(), batch.getEndAt());
 
 
@@ -122,7 +125,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
   @GetMapping( "/{grade}" )
   @ResponseBody
   public MappingJacksonValue findByGrade(@PathVariable( "grade" ) Grade grade) {
-    MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(batchService.findByGrade(grade));
+    MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(batchService.findById(1));
 
     SimpleBeanPropertyFilter forBatch = SimpleBeanPropertyFilter
         .filterOutAllExcept("id", "name");
@@ -135,38 +138,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
     return mappingJacksonValue;
   }
 
-  @GetMapping( "/{grade}/{id}" )
-  @ResponseBody
-  public MappingJacksonValue findByGradeAndStudent(@PathVariable( "grade" ) Grade grade,
-                                                   @PathVariable( "id" ) Integer id) {
-    List< BatchStudent > batchStudents = batchStudentService.findByStudent(studentService.findById(id));
-    List< Batch > notAssignBatch = new ArrayList<>();
-    List< Batch > batches = batchService.findByGrade(grade);
 
-    if ( !batchStudents.isEmpty() ) {
-      for ( Batch batch : batches ) {
-        for ( BatchStudent batchStudent : batchStudents ) {
-          if ( !batchStudent.getBatch().equals(batch) ) {
-            notAssignBatch.add(batch);
-          }
-        }
-      }
-    } else {
-      notAssignBatch.addAll(batches);
-    }
-
-    MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(notAssignBatch);
-
-    SimpleBeanPropertyFilter forBatch = SimpleBeanPropertyFilter
-        .filterOutAllExcept("id", "name");
-
-    FilterProvider filters = new SimpleFilterProvider()
-        .addFilter("Batch", forBatch);
-
-    mappingJacksonValue.setFilters(filters);
-
-    return mappingJacksonValue;
-  }
 
   @GetMapping( "/id/{id}" )
   @ResponseBody

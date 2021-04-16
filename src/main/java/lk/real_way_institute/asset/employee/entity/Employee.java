@@ -2,6 +2,7 @@ package lk.real_way_institute.asset.employee.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 
+import lk.real_way_institute.asset.batch.entity.Batch;
 import lk.real_way_institute.asset.common_asset.model.FileInfo;
 import lk.real_way_institute.asset.common_asset.model.enums.CivilStatus;
 import lk.real_way_institute.asset.common_asset.model.enums.Gender;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -80,6 +82,12 @@ public class Employee extends AuditEntity {
 
     @DateTimeFormat( pattern = "yyyy-MM-dd" )
     private LocalDate dateOfAssignment;
+
+    @ManyToMany
+    @JoinTable(name = "batch_employee",
+        joinColumns = @JoinColumn(name = "employee_id"),
+        inverseJoinColumns = @JoinColumn(name = "batch_id"))
+    private List< Batch > batches;
 
 
     @Transient

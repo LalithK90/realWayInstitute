@@ -186,28 +186,28 @@ public class TimeTableController {
 
     List< Batch > batches = new ArrayList<>();
 
-    Batch batchSend = new Batch();
-    if ( addStatus ) {
-      String dayOfWeek = date.getDayOfWeek().toString();
-      //Day of week
-      for ( Batch batch : batchService.findByClassDay(ClassDay.valueOf(dayOfWeek))
-          .stream()//filter by using batch and in timeTable
-          .filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE) && timeTableService.availableTimeTableCheck(from, to, x))
-          .collect(Collectors.toList()) ) {
-        batch.setCount(batchStudentService.countByBatch(batch));
-        batches.add(batch);
-      }
-      List< TimeTable > timeTables = new ArrayList<>();
-      for ( Batch batch1 : batches ) {
-        TimeTable timeTable = new TimeTable();
-        timeTable.setBatch(batch1);
-        timeTables.add(timeTable);
-      }
-      batchSend.setTimeTables(timeTables);
-    } else {
-      List< TimeTable > timeTables = timeTableService.findByCreatedAtIsBetween(from, to);
-      batchSend.setTimeTables(timeTables);
-    }
+   Batch batchSend = new Batch();
+//    if ( addStatus ) {
+//      String dayOfWeek = date.getDayOfWeek().toString();
+//      //Day of week
+//      for ( Batch batch : batchService.findByClassDay(ClassDay.valueOf(dayOfWeek))
+//          .stream()//filter by using batch and in timeTable
+//          .filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE) && timeTableService.availableTimeTableCheck(from, to, x))
+//          .collect(Collectors.toList()) ) {
+//        batch.setCount(batchStudentService.countByBatch(batch));
+//        batches.add(batch);
+//      }
+//      List< TimeTable > timeTables = new ArrayList<>();
+//      for ( Batch batch1 : batches ) {
+//        TimeTable timeTable = new TimeTable();
+//        timeTable.setBatch(batch1);
+//        timeTables.add(timeTable);
+//      }
+//      batchSend.setTimeTables(timeTables);
+//    } else {
+//      List< TimeTable > timeTables = timeTableService.findByCreatedAtIsBetween(from, to);
+//      batchSend.setTimeTables(timeTables);
+//    }
 
 
     model.addAttribute("batches", batchSend);

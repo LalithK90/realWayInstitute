@@ -5,6 +5,7 @@ package lk.real_way_institute.asset.employee.service;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.employee.dao.EmployeeDao;
 import lk.real_way_institute.asset.employee.entity.Employee;
+import lk.real_way_institute.asset.employee.entity.enums.Designation;
 import lk.real_way_institute.util.interfaces.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.*;
@@ -83,4 +84,7 @@ public class EmployeeService implements AbstractService< Employee, Integer > {
     }
 
 
+  public List< Employee > findByDesignation(Designation designation) {
+      return employeeDao.findByDesignation(designation);
+  }
 }

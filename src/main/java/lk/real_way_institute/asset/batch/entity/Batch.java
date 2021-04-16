@@ -3,11 +3,11 @@ package lk.real_way_institute.asset.batch.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 
-import lk.real_way_institute.asset.batch.entity.enums.ClassDay;
-import lk.real_way_institute.asset.batch.entity.enums.Grade;
 import lk.real_way_institute.asset.batch_exam.entity.BatchExam;
 import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.employee.entity.Employee;
+import lk.real_way_institute.asset.instalment_date.entity.InstalmentDate;
 import lk.real_way_institute.asset.time_table.entity.TimeTable;
 import lk.real_way_institute.util.audit.AuditEntity;
 import lombok.*;
@@ -33,16 +33,8 @@ public class Batch extends AuditEntity {
   @Column( unique = true )
   private String name;
 
-  private String year;
-
-  @Enumerated( EnumType.STRING )
-  private Grade grade;
-
   @Enumerated( EnumType.STRING )
   private LiveDead liveDead;
-
-  @Enumerated( EnumType.STRING )
-  private ClassDay classDay;
 
   @DateTimeFormat( pattern = "HH:mm" )
   private LocalTime startAt;
@@ -50,6 +42,10 @@ public class Batch extends AuditEntity {
   @DateTimeFormat( pattern = "HH:mm" )
   private LocalTime endAt;
 
+  private int installmentCount;
+
+  @ManyToOne( cascade = {CascadeType.MERGE, CascadeType.PERSIST} )
+  private InstalmentDate instalmentDate;
 
   @OneToMany( mappedBy = "batch" )
   private List< BatchStudent > batchStudents;
@@ -59,6 +55,13 @@ public class Batch extends AuditEntity {
 
   @OneToMany( mappedBy = "batch" )
   private List< BatchExam > batchExams;
+
+  @ManyToMany
+  @JoinTable( name = "batch_employee",
+      joinColumns = @JoinColumn( name = "batch_id" ),
+      inverseJoinColumns = @JoinColumn( name = "employee_id" ) )
+  private List< Employee > employees;
+
 
   @Transient
   private int count;

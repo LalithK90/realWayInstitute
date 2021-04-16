@@ -85,11 +85,11 @@ public class BatchStudentController {
     if ( addStatus ) {
       model.addAttribute("student", new BatchStudent());
       //not registered student on this batch
-      List< Student > notRegisteredStudent = studentService.findByGrade(batch.getGrade())
-          .stream()
-          .filter(x -> !registeredStudent.contains(x))
-          .collect(Collectors.toList());
-      model.addAttribute("notRegisteredStudent", notRegisteredStudent);
+//      List< Student > notRegisteredStudent = studentService.findByGrade(batch.getGrade())
+//          .stream()
+//          .filter(x -> !registeredStudent.contains(x))
+//          .collect(Collectors.toList());
+//      model.addAttribute("notRegisteredStudent", notRegisteredStudent);
     }
 
   }

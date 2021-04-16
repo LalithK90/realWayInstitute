@@ -9,6 +9,7 @@ public enum Designation {
   ADMIN("Admin"),
     MANAGER("Manager"),
     SECTION("Section Head "),
+    INSTRUCTOR("Instructor"),
     HR_MANAGER("HR Manager"),
     CASHIER("Cashier");
 

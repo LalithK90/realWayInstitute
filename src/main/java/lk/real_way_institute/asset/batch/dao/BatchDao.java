@@ -19,10 +19,6 @@ public interface BatchDao extends JpaRepository< Batch, Integer > {
 
   Batch findByName(String name);
 
-  List< Batch > findByGrade(Grade grade);
 
-  List< Batch > findByClassDay(ClassDay classDay);
-
-  Batch findByYearAndClassDayAndStartAtIsBetweenAndEndAtIsBetween(String year, ClassDay classDay, LocalTime startAt,
-                                                                  LocalTime endAt, LocalTime startAt1, LocalTime endAt1);
+  Batch findByNameAndStartAtIsBetweenAndEndAtIsBetween(String name, LocalTime startAt, LocalTime endAt, LocalTime startAt1, LocalTime endAt1);
 }

@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.2.6.RELEASE'
+	id 'org.springframework.boot' version '2.2.4.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 }
@@ -13,19 +13,10 @@ configurations {
 	runtimeClasspath {
 		extendsFrom developmentOnly
 	}
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
 }
 
 repositories {
-	jcenter()
-	maven {
-		url "https://maven.springframework.org/release"
-	}
-	maven {
-		url "https://maven.restlet.com"
-	}
+	mavenCentral()
 }
 
 dependencies {
@@ -75,18 +66,20 @@ dependencies {
 // https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
 	compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.5'
 
-
-
 	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
-	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {
 	useJUnitPlatform()
+}
+
+/*To boot run*/
+bootRun {
+	sourceResources sourceSets.main
 }

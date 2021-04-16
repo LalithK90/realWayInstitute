@@ -55,16 +55,8 @@ public class BatchService implements AbstractService< Batch, Integer > {
     return batchDao.findByName(name);
   }
 
-  public List< Batch > findByGrade(Grade grade) {
-    return batchDao.findByGrade(grade);
-  }
 
-  public List< Batch > findByClassDay(ClassDay classDay) {
-    return batchDao.findByClassDay(classDay);
-  }
-
-  public Batch findByYearAndClassDayAndStartAtIsBetweenAndEndAtIsBetween(String year, ClassDay classDay, LocalTime startAt, LocalTime endAt, LocalTime startAt1,
-                                                                         LocalTime endAt1) {
-  return batchDao.findByYearAndClassDayAndStartAtIsBetweenAndEndAtIsBetween(year,classDay,startAt,endAt,startAt1,endAt1);
+  public Batch findByNameAndStartAtIsBetweenAndEndAtIsBetween(String name, LocalTime startAt, LocalTime endAt, LocalTime startAt1, LocalTime endAt1) {
+  return batchDao.findByNameAndStartAtIsBetweenAndEndAtIsBetween(name,startAt,endAt,startAt1,endAt1);
   }
 }
