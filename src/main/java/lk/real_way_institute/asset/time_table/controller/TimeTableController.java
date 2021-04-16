@@ -1,25 +1,24 @@
 package lk.real_way_institute.asset.time_table.controller;
 
 
-import lk.succes_student_management.asset.batch.entity.Batch;
-import lk.succes_student_management.asset.batch.entity.enums.ClassDay;
-import lk.succes_student_management.asset.batch.service.BatchService;
-import lk.succes_student_management.asset.batch_student.service.BatchStudentService;
-import lk.succes_student_management.asset.common_asset.model.DateTimeTable;
-import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
-import lk.succes_student_management.asset.hall.service.HallService;
-import lk.succes_student_management.asset.student.entity.Student;
-import lk.succes_student_management.asset.student.service.StudentService;
-import lk.succes_student_management.asset.subject.service.SubjectService;
-import lk.succes_student_management.asset.teacher.entity.Teacher;
-import lk.succes_student_management.asset.teacher.service.TeacherService;
-import lk.succes_student_management.asset.time_table.entity.TimeTable;
-import lk.succes_student_management.asset.time_table.service.TimeTableService;
-import lk.succes_student_management.asset.user_management.entity.User;
-import lk.succes_student_management.asset.user_management.service.UserService;
-import lk.succes_student_management.util.service.DateTimeAgeService;
-import lk.succes_student_management.util.service.EmailService;
-import lk.succes_student_management.util.service.MakeAutoGenerateNumberService;
+import lk.real_way_institute.asset.batch.entity.Batch;
+import lk.real_way_institute.asset.batch.entity.enums.ClassDay;
+import lk.real_way_institute.asset.batch.service.BatchService;
+import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
+import lk.real_way_institute.asset.common_asset.model.DateTimeTable;
+import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.student.entity.Student;
+import lk.real_way_institute.asset.student.service.StudentService;
+import lk.real_way_institute.asset.subject.service.SubjectService;
+import lk.real_way_institute.asset.teacher.entity.Teacher;
+import lk.real_way_institute.asset.teacher.service.TeacherService;
+import lk.real_way_institute.asset.time_table.entity.TimeTable;
+import lk.real_way_institute.asset.time_table.service.TimeTableService;
+import lk.real_way_institute.asset.user_management.entity.User;
+import lk.real_way_institute.asset.user_management.service.UserService;
+import lk.real_way_institute.util.service.DateTimeAgeService;
+import lk.real_way_institute.util.service.EmailService;
+import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -40,7 +39,6 @@ import java.util.stream.Collectors;
 @RequestMapping( "/timeTable" )
 public class TimeTableController {
   private final TimeTableService timeTableService;
-  private final HallService hallService;
   private final SubjectService subjectService;
   private final TeacherService teacherService;
   private final BatchService batchService;
@@ -52,14 +50,13 @@ public class TimeTableController {
   private final EmailService emailService;
 
 
-  public TimeTableController(TimeTableService timeTableService, HallService hallService,
+  public TimeTableController(TimeTableService timeTableService,
                              SubjectService subjectService, TeacherService teacherService, BatchService batchService,
                              BatchStudentService batchStudentService,
                              MakeAutoGenerateNumberService makeAutoGenerateNumberService,
                              DateTimeAgeService dateTimeAgeService, UserService userService,
                              StudentService studentService, EmailService emailService) {
     this.timeTableService = timeTableService;
-    this.hallService = hallService;
     this.subjectService = subjectService;
     this.teacherService = teacherService;
     this.batchService = batchService;
@@ -190,8 +187,6 @@ public class TimeTableController {
   }
 
   private String commonThing(Model model, LocalDate date, boolean addStatus) {
-    model.addAttribute("halls",
-                       hallService.findAll().stream().filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE)).collect(Collectors.toList()));
 
     LocalDateTime from = dateTimeAgeService.dateTimeToLocalDateStartInDay(date);
     LocalDateTime to = dateTimeAgeService.dateTimeToLocalDateEndInDay(date);

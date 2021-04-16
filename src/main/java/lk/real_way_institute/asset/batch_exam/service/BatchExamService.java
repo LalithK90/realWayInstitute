@@ -1,11 +1,12 @@
 package lk.real_way_institute.asset.batch_exam.service;
 
-import lk.succes_student_management.asset.batch.entity.Batch;
-import lk.succes_student_management.asset.batch_exam.dao.BatchExamDao;
-import lk.succes_student_management.asset.batch_exam.entity.BatchExam;
-import lk.succes_student_management.asset.batch_exam.entity.enums.ExamStatus;
-import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
-import lk.succes_student_management.util.interfaces.AbstractService;
+
+import lk.real_way_institute.asset.batch.entity.Batch;
+import lk.real_way_institute.asset.batch_exam.dao.BatchExamDao;
+import lk.real_way_institute.asset.batch_exam.entity.BatchExam;
+import lk.real_way_institute.asset.batch_exam.entity.enums.ExamStatus;
+import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.util.interfaces.AbstractService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,8 +1,9 @@
 package lk.real_way_institute.asset.user_management.service;
 
-import lk.succes_student_management.asset.user_management.CustomerUserDetails;
-import lk.succes_student_management.asset.user_management.dao.UserDao;
-import lk.succes_student_management.asset.user_management.entity.User;
+
+import lk.real_way_institute.asset.user_management.CustomerUserDetails;
+import lk.real_way_institute.asset.user_management.dao.UserDao;
+import lk.real_way_institute.asset.user_management.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

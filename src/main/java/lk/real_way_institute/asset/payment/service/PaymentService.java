@@ -1,11 +1,12 @@
 package lk.real_way_institute.asset.payment.service;
 
 
-import lk.succes_student_management.asset.batch_student.entity.BatchStudent;
-import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
-import lk.succes_student_management.asset.payment.dao.PaymentDao;
-import lk.succes_student_management.asset.payment.entity.Payment;
-import lk.succes_student_management.util.interfaces.AbstractService;
+
+import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
+import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.payment.dao.PaymentDao;
+import lk.real_way_institute.asset.payment.entity.Payment;
+import lk.real_way_institute.util.interfaces.AbstractService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

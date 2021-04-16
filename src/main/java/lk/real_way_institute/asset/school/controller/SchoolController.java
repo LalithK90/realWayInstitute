@@ -1,9 +1,10 @@
 package lk.real_way_institute.asset.school.controller;
 
 
-import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
-import lk.succes_student_management.asset.school.entity.School;
-import lk.succes_student_management.asset.school.service.SchoolService;
+
+import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.school.entity.School;
+import lk.real_way_institute.asset.school.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

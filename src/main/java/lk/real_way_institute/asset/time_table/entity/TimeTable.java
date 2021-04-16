@@ -2,12 +2,11 @@ package lk.real_way_institute.asset.time_table.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import lk.succes_student_management.asset.batch.entity.Batch;
-import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
-import lk.succes_student_management.asset.hall.entity.Hall;
-import lk.succes_student_management.asset.time_table.entity.enums.TimeTableStatus;
-import lk.succes_student_management.asset.time_table_student_attendence.entity.TimeTableStudentAttendance;
-import lk.succes_student_management.util.audit.AuditEntity;
+import lk.real_way_institute.asset.batch.entity.Batch;
+import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.time_table.entity.enums.TimeTableStatus;
+import lk.real_way_institute.asset.time_table_student_attendence.entity.TimeTableStudentAttendance;
+import lk.real_way_institute.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,8 +47,6 @@ public class TimeTable extends AuditEntity {
   @ManyToOne
   private Batch batch;
 
-  @ManyToOne
-  private Hall hall;
 
   @OneToMany( mappedBy = "timeTable", cascade = CascadeType.PERSIST )
   private List< TimeTableStudentAttendance > timeTableStudentAttendances;

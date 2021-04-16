@@ -1,14 +1,15 @@
 package lk.real_way_institute.asset.time_table_student_attendence.controller;
 
-import lk.succes_student_management.asset.batch_student.service.BatchStudentService;
-import lk.succes_student_management.asset.common_asset.model.enums.AttendanceStatus;
-import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
-import lk.succes_student_management.asset.time_table.entity.TimeTable;
-import lk.succes_student_management.asset.time_table.entity.enums.TimeTableStatus;
-import lk.succes_student_management.asset.time_table.service.TimeTableService;
-import lk.succes_student_management.asset.time_table_student_attendence.entity.TimeTableStudentAttendance;
-import lk.succes_student_management.asset.time_table_student_attendence.service.TimeTableStudentAttendanceService;
-import lk.succes_student_management.util.service.MakeAutoGenerateNumberService;
+
+import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
+import lk.real_way_institute.asset.common_asset.model.enums.AttendanceStatus;
+import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.time_table.entity.TimeTable;
+import lk.real_way_institute.asset.time_table.entity.enums.TimeTableStatus;
+import lk.real_way_institute.asset.time_table.service.TimeTableService;
+import lk.real_way_institute.asset.time_table_student_attendence.entity.TimeTableStudentAttendance;
+import lk.real_way_institute.asset.time_table_student_attendence.service.TimeTableStudentAttendanceService;
+import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

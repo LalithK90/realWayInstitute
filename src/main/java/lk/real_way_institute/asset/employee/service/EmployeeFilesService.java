@@ -2,11 +2,12 @@ package lk.real_way_institute.asset.employee.service;
 
 
 
-import lk.succes_student_management.asset.common_asset.model.FileInfo;
-import lk.succes_student_management.asset.employee.controller.EmployeeController;
-import lk.succes_student_management.asset.employee.dao.EmployeeFilesDao;
-import lk.succes_student_management.asset.employee.entity.Employee;
-import lk.succes_student_management.asset.employee.entity.EmployeeFiles;
+
+import lk.real_way_institute.asset.common_asset.model.FileInfo;
+import lk.real_way_institute.asset.employee.controller.EmployeeController;
+import lk.real_way_institute.asset.employee.dao.EmployeeFilesDao;
+import lk.real_way_institute.asset.employee.entity.Employee;
+import lk.real_way_institute.asset.employee.entity.EmployeeFiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;

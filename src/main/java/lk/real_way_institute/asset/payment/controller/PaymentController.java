@@ -1,18 +1,19 @@
 package lk.real_way_institute.asset.payment.controller;
 
 
-import lk.succes_student_management.asset.batch_student.entity.BatchStudent;
-import lk.succes_student_management.asset.batch_student.service.BatchStudentService;
-import lk.succes_student_management.asset.common_asset.model.TwoDate;
-import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
-import lk.succes_student_management.asset.payment.entity.Payment;
-import lk.succes_student_management.asset.payment.entity.enums.PaymentStatus;
-import lk.succes_student_management.asset.payment.service.PaymentService;
-import lk.succes_student_management.asset.student.entity.Student;
-import lk.succes_student_management.asset.student.service.StudentService;
-import lk.succes_student_management.util.service.DateTimeAgeService;
-import lk.succes_student_management.util.service.EmailService;
-import lk.succes_student_management.util.service.MakeAutoGenerateNumberService;
+
+import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
+import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
+import lk.real_way_institute.asset.common_asset.model.TwoDate;
+import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.payment.entity.Payment;
+import lk.real_way_institute.asset.payment.entity.enums.PaymentStatus;
+import lk.real_way_institute.asset.payment.service.PaymentService;
+import lk.real_way_institute.asset.student.entity.Student;
+import lk.real_way_institute.asset.student.service.StudentService;
+import lk.real_way_institute.util.service.DateTimeAgeService;
+import lk.real_way_institute.util.service.EmailService;
+import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

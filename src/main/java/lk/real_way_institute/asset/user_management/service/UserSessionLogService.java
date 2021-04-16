@@ -1,10 +1,10 @@
 package lk.real_way_institute.asset.user_management.service;
 
-import lk.succes_student_management.asset.user_management.dao.UserSessionLogDao;
-import lk.succes_student_management.asset.user_management.entity.Enum.UserSessionLogStatus;
-import lk.succes_student_management.asset.user_management.entity.User;
-import lk.succes_student_management.asset.user_management.entity.UserSessionLog;
-import lk.succes_student_management.util.interfaces.AbstractService;
+import lk.real_way_institute.asset.user_management.dao.UserSessionLogDao;
+import lk.real_way_institute.asset.user_management.entity.Enum.UserSessionLogStatus;
+import lk.real_way_institute.asset.user_management.entity.User;
+import lk.real_way_institute.asset.user_management.entity.UserSessionLog;
+import lk.real_way_institute.util.interfaces.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @CacheConfig( cacheNames = {"userSessionLog"} )
-public class UserSessionLogService implements AbstractService<UserSessionLog, Integer > {
+public class UserSessionLogService implements AbstractService< UserSessionLog, Integer > {
     private final UserSessionLogDao userSessionLogDao;
 
     @Autowired

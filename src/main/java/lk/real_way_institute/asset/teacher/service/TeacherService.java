@@ -1,9 +1,10 @@
 package lk.real_way_institute.asset.teacher.service;
 
-import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
-import lk.succes_student_management.asset.teacher.dao.TeacherDao;
-import lk.succes_student_management.asset.teacher.entity.Teacher;
-import lk.succes_student_management.util.interfaces.AbstractService;
+
+import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.teacher.dao.TeacherDao;
+import lk.real_way_institute.asset.teacher.entity.Teacher;
+import lk.real_way_institute.util.interfaces.AbstractService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class TeacherService implements AbstractService<Teacher, Integer> {
         this.teacherDao = teacherDao;
     }
 
-    public List<Teacher> findAll() {
+    public List< Teacher > findAll() {
         return teacherDao.findAll();
     }
 

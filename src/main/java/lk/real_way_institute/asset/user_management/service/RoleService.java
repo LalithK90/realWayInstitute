@@ -1,8 +1,9 @@
 package lk.real_way_institute.asset.user_management.service;
 
-import lk.succes_student_management.asset.user_management.dao.RoleDao;
-import lk.succes_student_management.asset.user_management.entity.Role;
-import lk.succes_student_management.util.interfaces.AbstractService;
+
+import lk.real_way_institute.asset.user_management.dao.RoleDao;
+import lk.real_way_institute.asset.user_management.entity.Role;
+import lk.real_way_institute.util.interfaces.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.*;
 import org.springframework.data.domain.Example;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Service
 @CacheConfig( cacheNames = {"role"} ) // tells Spring where to store cache for this class
-public class RoleService implements AbstractService<Role, Integer > {
+public class RoleService implements AbstractService< Role, Integer > {
     private final RoleDao roleDao;
 
     @Autowired

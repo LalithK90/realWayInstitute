@@ -1,12 +1,12 @@
 package lk.real_way_institute.asset.time_table.service;
 
 
-import lk.succes_student_management.asset.batch.entity.Batch;
-import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
-import lk.succes_student_management.asset.time_table.dao.TimeTableDao;
-import lk.succes_student_management.asset.time_table.entity.TimeTable;
-import lk.succes_student_management.asset.time_table.entity.enums.TimeTableStatus;
-import lk.succes_student_management.util.interfaces.AbstractService;
+import lk.real_way_institute.asset.batch.entity.Batch;
+import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.time_table.dao.TimeTableDao;
+import lk.real_way_institute.asset.time_table.entity.TimeTable;
+import lk.real_way_institute.asset.time_table.entity.enums.TimeTableStatus;
+import lk.real_way_institute.util.interfaces.AbstractService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

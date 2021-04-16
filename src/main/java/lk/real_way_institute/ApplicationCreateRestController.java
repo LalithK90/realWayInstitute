@@ -1,16 +1,17 @@
 package lk.real_way_institute;
 
-import lk.succes_student_management.asset.common_asset.model.enums.CivilStatus;
-import lk.succes_student_management.asset.common_asset.model.enums.Gender;
-import lk.succes_student_management.asset.common_asset.model.enums.Title;
-import lk.succes_student_management.asset.employee.entity.Employee;
-import lk.succes_student_management.asset.employee.entity.enums.Designation;
-import lk.succes_student_management.asset.employee.entity.enums.EmployeeStatus;
-import lk.succes_student_management.asset.employee.service.EmployeeService;
-import lk.succes_student_management.asset.user_management.entity.Role;
-import lk.succes_student_management.asset.user_management.entity.User;
-import lk.succes_student_management.asset.user_management.service.RoleService;
-import lk.succes_student_management.asset.user_management.service.UserService;
+
+import lk.real_way_institute.asset.common_asset.model.enums.CivilStatus;
+import lk.real_way_institute.asset.common_asset.model.enums.Gender;
+import lk.real_way_institute.asset.common_asset.model.enums.Title;
+import lk.real_way_institute.asset.employee.entity.Employee;
+import lk.real_way_institute.asset.employee.entity.enums.Designation;
+import lk.real_way_institute.asset.employee.entity.enums.EmployeeStatus;
+import lk.real_way_institute.asset.employee.service.EmployeeService;
+import lk.real_way_institute.asset.user_management.entity.Role;
+import lk.real_way_institute.asset.user_management.entity.User;
+import lk.real_way_institute.asset.user_management.service.RoleService;
+import lk.real_way_institute.asset.user_management.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

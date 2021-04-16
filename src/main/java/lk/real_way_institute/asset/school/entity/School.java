@@ -1,7 +1,8 @@
 package lk.real_way_institute.asset.school.entity;
 
 
-import lk.succes_student_management.asset.common_asset.model.enums.LiveDead;
+
+import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,6 +1,6 @@
 package lk.real_way_institute.asset.report.model;
 
-import lk.succes_student_management.asset.teacher.entity.Teacher;
+import lk.real_way_institute.asset.teacher.entity.Teacher;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,9 @@
 package lk.real_way_institute.asset.time_table.dao;
 
 
-import lk.succes_student_management.asset.batch.entity.Batch;
-import lk.succes_student_management.asset.time_table.entity.TimeTable;
-import lk.succes_student_management.asset.time_table.entity.enums.TimeTableStatus;
+import lk.real_way_institute.asset.batch.entity.Batch;
+import lk.real_way_institute.asset.time_table.entity.TimeTable;
+import lk.real_way_institute.asset.time_table.entity.enums.TimeTableStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

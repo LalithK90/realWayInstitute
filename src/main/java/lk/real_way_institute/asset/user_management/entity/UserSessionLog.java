@@ -1,6 +1,6 @@
 package lk.real_way_institute.asset.user_management.entity;
 
-import lk.succes_student_management.asset.user_management.entity.Enum.UserSessionLogStatus;
+import lk.real_way_institute.asset.user_management.entity.Enum.UserSessionLogStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
