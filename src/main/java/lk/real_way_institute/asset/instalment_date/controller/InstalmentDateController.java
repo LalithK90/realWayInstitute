@@ -1,12 +1,10 @@
 package lk.real_way_institute.asset.instalment_date.controller;
 
-
-
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.instalment_date.entity.InstalmentDate;
-import lk.real_way_institute.asset.instalment_date.service.InstalmentDateService;
 import lk.real_way_institute.util.interfaces.AbstractController;
 import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
+import lk.real_way_institute.asset.instalment_date.service.InstalmentDateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -70,15 +68,6 @@ public class InstalmentDateController implements AbstractController< InstalmentD
       model.addAttribute("instalmentDate", instalmentDate);
       model.addAttribute("addStatus", true);
       return "instalmentDate/addInstalmentDate";
-    }
-    if ( instalmentDate.getId() == null ) {
-      InstalmentDate lastInstalmentDate = instalmentDateService.lastInstalmentDate();
-      if ( lastInstalmentDate == null ) {
-        instalmentDate.setCode("SSSC" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
-      } else {
-        instalmentDate.setCode("SSSC" + makeAutoGenerateNumberService.numberAutoGen(lastInstalmentDate.getCode()
-                                                                                 .substring(4)).toString());
-      }
     }
 
     try {

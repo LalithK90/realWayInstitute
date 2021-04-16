@@ -13,7 +13,7 @@
   <div class="col-4" >
   </div >
   <div class="col-4" >
-    <h1 >Create a Batch</h1 >
+    <h1 >Batch Form</h1 >
   </div >
   <div class="col-4" >
     <a href="/batch" >
@@ -28,15 +28,8 @@
   <form action="/batch/save" data-th-object="${batch}" method="post" >
     <!--id-->
     <div class="form-group text-right" data-th-if="${addStatus==false}" >
-      <div class="col-6" >
-        <label data-th-for="${id}" >Id</label >
-      </div >
-      <div class="col-6" >
-        <label >
-          <input class="form-control" data-th-field="*{id}" readonly type="text" >
+          <input class="form-control" data-th-field="*{id}" readonly type="hidden" >
           <input class="form-control" data-th-field="*{liveDead}" readonly type="hidden" >
-        </label >
-      </div >
     </div >
     <!--reference-->
     <div class="form-group" data-th-if="${addStatus==false}" >
@@ -46,13 +39,14 @@
                autofocus readonly >
       </div >
     </div >
-    <div class="row">
-      <div class="col-6">
+    <div class="row" >
+      <div class="col-6" data-th-if="${addStatus==true}" >
         <!--academicYear-->
         <div class="form-group" >
-          <label class="col-6 control-label" data-th-for="${'year'}" >Academic Year</label >
-          <div class="col-6" >
-            <select id="year" class="form-control" data-th-field="*{year}" required >
+          <label class="control-label" data-th-for="${'year'}" >Academic Year :</label >
+          <div class="" >
+            <select id="year" class="form-control" required >
+              <option value="" >Select Year</option >
               <option value="2021" >2021</option >
               <option value="2022" >2022</option >
               <option value="2023" >2023</option >
@@ -64,95 +58,149 @@
             </select >
           </div >
         </div >
-      </div>
-      <div class="col-6">
-        <!--grade-->
-        <div class="form-group" >
-          <label class="col-6 control-label" data-th-for="${'grade'}" >Grade</label >
-          <div class="col-6" >
-            <select id="grade" class="form-control" data-th-field="*{grade}" required >
-              <option value="" >Select the Grade</option >
-              <option data-th-each="grade : ${grades}"
-                      data-th-text="${grade.grade}"
-                      data-th-value="${grade}" ></option >
-            </select >
-          </div >
-        </div >
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-6">
+      </div >
+      <div class="col-6" >
         <!--teacherName-->
         <div class="form-group" >
-          <label data-th-for="${'teacher'}" class="col-6 control-label" >Teacher Name</label >
-          <div class="col-6" >
-            <select id="teacher" class="form-control" data-th-field="*{teacher}" required >
+          <label data-th-for="${'employee'}" class="control-label" >Main Instructor Name :</label >
+          <div class="pt-3" >
+            <select id="employee" class="form-control" data-th-field="*{employee}" required >
               <option value="" >Select the Teacher</option >
-              <option data-th-each="teacher : ${teachers}"
-                      data-th-text="${teacher.firstName+'_'+teacher.fee}"
-                      data-th-value="${teacher.id}" ></option >
+              <option data-th-each="employee : ${employees}"
+                      data-th-text="${employee.name}"
+                      data-th-value="${employee.id}" ></option >
             </select >
           </div >
         </div >
-      </div>
-      <div class="col-6">
+      </div >
+    </div >
+
+    <div class="row" >
+      <div class="col-6" data-th-if="${addStatus==true}" >
         <!--classDay-->
         <div class="form-group" >
-          <label data-th-for="${'classDay'}" class="col-6 control-label" >Class Day</label >
-          <div class="col-6" >
-            <select id="classDay" class="form-control" data-th-field="*{classDay}" required >
+          <label data-th-for="${'classDay'}" class=" control-label" >Class Day :</label >
+          <div class="" >
+            <select id="classDay" class="form-control" required >
               <option value="" >Select Day</option >
-              <option data-th-each="classDay : ${classDays}"
-                      data-th-text="${classDay.classDay}"
-                      data-th-value="${classDay}" ></option >
+              <option value="Mon" >Monday</option >
+              <option value="Sun" >Tuesday</option >
+              <option value="Sun" >Wednesday</option >
+              <option value="Sun" >Thursday</option >
+              <option value="Sun" >Saturday</option >
+              <option value="Sun" >Sunday</option >
             </select >
           </div >
         </div >
-      </div>
-    </div>
-    <div class="row">
-      <!--opening hours from - to-->
-      <div class="form-group" >
-        <label data-th-for="${name}" class="col-6 control-label" >Time Period</label >
-        <div class="row" >
-          <div class="container">
-            <div class="form-group" >
-              <label for="startAt" >FROM (opening hours 08:00 to 20:00) :</label >
-              <input class="form-control" id="startAt" data-th-field="*{startAt}" type="time" step="3600" min="08:00"
-                     max="20:00" />
+      </div >
+      <div class="col-6" >
+        <!--classDay-->
+        <div class="form-group" >
+          <div class="row" >
+            <div class="col-6" >
+              <div class="form-group" >
+                <label for="startDate" >FROM :</label >
+                <input class="form-control" id="startDate" data-th-field="*{startAt}" type="date" />
+              </div >
             </div >
-          </div>
-          <div class="container">
-            <div class="form-group" >
-              <label for="endAt" >TO (opening hours 08:00 to 20:00) :</label >
-              <input class="form-control" id="endAt" data-th-field="*{endAt}" type="time" step="3600" min="08:00"
-                     max="20:00" />
+            <div class="col-6" >
+              <div class="form-group" >
+                <label for="endDate" >TO :</label >
+                <input class="form-control" id="endDate" data-th-field="*{endAt}" type="date" />
+              </div >
             </div >
-          </div>
+          </div >
         </div >
       </div >
-    </div>
-    <div class="row">
-      <!--batchName-->
-      <div class="col-12" >
-        <label data-th-for="${name}" class="control-label col-4" >Batch Name</label >
-        <div class="col-8" >
-          <input type="text" data-th-field="*{name}" id="name" placeholder="Batch Name" class="form-control"
-                 autofocus readonly >
+    </div >
+
+    <!--batch name-->
+    <div class="row" >
+      <div class="col-6" data-th-if="${addStatus==true}" >
+        <div class="form-group" >
+          <label data-th-for="${name}" class="control-label col-4" >Enter Name :</label >
+          <div class="" >
+            <input type="text" id="enterName" placeholder="Enter Name" class="form-control"
+                   required >
+          </div >
         </div >
       </div >
-    </div>
+      <div class="col-6" >
+        <div class="form-group" >
+          <label data-th-for="${name}" class="control-label col-4" >Batch Name :</label >
+          <div class="" >
+            <input type="text" data-th-field="*{name}" id="nameBatch" placeholder="Batch Name" class="form-control"
+                   autofocus readonly >
+          </div >
+        </div >
+      </div >
+    </div >
+    <!--installment count -->
+    <div class="row" >
+      <div class="col-6" >
+        <div class="form-group" data-th-if="${addStatus==true}" >
+          <label data-th-for="${name}" class="control-label col-4" >Instalment Count :</label >
+          <div class="" >
+            <input type="number" step="1" min="0" id="instalmentCount" placeholder="Enter Name" class="form-control"
+                   required >
+          </div >
+        </div >
+        <div class="form-group" >
+          <label data-th-for="${name}" class="control-label col-4" >Course Price :</label >
+          <div class="" >
+            <input type="number" step=".01" min="0" id="courseFee" data-th-field="*{courseFee}" placeholder="price"
+                   class="form-control"
+                   required >
+          </div >
+        </div >
+      </div >
+      <div class="col-6" >
+        <div class="form-group" >
+          <table class="table table-striped table-inverse" id="instalmentTable" >
+            <caption >Instalment Plan Table</caption >
+            <thead class="thead-inverse" >
+            <tr >
+              <th >No</th >
+              <th >Date</th >
+              <th >Amount</th >
+            </tr >
+            </thead >
+            <tbody >
+            <tr data-th-each="instalmentDate, index : ${batch.instalmentDates}" >
+              <td ><span data-th-text="${index.count}"></span>
+                <input type="hidden" data-th-field="${batch.instalmentDates[__${index.index}__].id}" >
+                <input type="hidden" data-th-field="${batch.instalmentDates[__${index.index}__].liveDead}" >
+              </td >
+              <td >
+                <input type="date" class="form-control" data-th-id="${'k'+index.index}"
+                       data-th-field="${batch.instalmentDates[__${index.index}__].date}" onchange="dateValid(this)" required >
+              </td >
+              <td >
+                <input type="number" class="form-control amount" min="0" step="0.01"
+                       data-th-field="${batch.instalmentDates[__${index.index}__].amount}"
+                       required >
+              </td >
+            </tr >
+            </tbody >
+          </table >
+        </div >
+      </div >
+    </div >
+
+
     <!--error-->
     <div class="form-group" >
-      <label  data-th-if="${#fields.hasErrors('*')}" data-th-text="'Errors: '" >Errors: </label >
+      <label data-th-if="${#fields.hasErrors('*')}" data-th-text="'Errors: '" >Errors: </label >
       <ul >
-        <li  data-th-each="err : ${#fields.errors('*')}" data-th-text="${err}" class="text-danger" ></li >
+        <li data-th-each="err : ${#fields.errors('*')}" data-th-text="${err}" class="text-danger" ></li >
       </ul >
     </div >
+
     <div class="row container-fluid" >
       <div class="col-sm-2 col-sm-offset-2" >
-        <a href="/batch"><button type="button" class="btn btn-danger btn-block" >Back</button ></a>
+        <a href="/batch" >
+          <button type="button" class="btn btn-danger btn-block" >Back</button >
+        </a >
       </div >
 
       <div class="col-sm-2 col-sm-offset-2" >
@@ -160,53 +208,124 @@
       </div >
 
       <div class="col-sm-2 col-sm-offset-2" >
-        <button type="submit" class="btn btn-success btn-block" >Submit</button >
+        <button type="submit" id="submit" class="btn btn-success btn-block" >Submit</button >
       </div >
     </div >
-  </form > <!-- /form -->
+  </form >
+  <!-- /form -->
 </div >
-<input type="hidden" id="subjectUrl" data-th-value="${subjectUrl}" >
 <!--footer include-->
 <div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
 <!--script include-->
 <div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
 <script >
-    $("#teacher, #grade, #year,#startAt, #endAt, #classDay").change(function () {
-        let id = $("#teacher").val();
-        let startDateTime = $(`#startAt`).val();
-        let endDateTime = $("#endAt").val();
-        let day = $("#classDay").val();
-        if (id && startDateTime && endDateTime) {
-            $.ajax({
-                type: 'GET',
-                url: $("#subjectUrl").val() + id,
-                success: function (resp) {
-                    if (startDateTime !== "" && endDateTime !== "") {
-                        let sDT = Date.parse('20 Aug 2020 ' + startDateTime);
-                        let eDT = Date.parse('20 Aug 2020 ' + endDateTime);
-                        if (sDT > eDT) {
-                            swal({
-                                title: "Could you accept those time.. !",
-                                icon: "warning",
-                                text: "Please check your time \n End Time can not be less than Start Time",
-                            })
-                            $(`#endAt`).val(startDateTime);
-                        }
-                    }
-                    $("#name").val($("#year").val()
-                        + "-" + $("#grade").val()
-                        + "-" + $("#teacher option:selected").html().toUpperCase()
-                        + "-" + resp.name.toUpperCase()
-                        + "-" + day
-                        + "-" + startDateTime
-                        + "-" + endDateTime);
 
-                },
-                error: function (err) {
-                    console.log(err);
-                }
+    $(document).ready(function () {
+        $("#employee").select2({
+            data: $(this).val()
+        }).addClass("form-control");
+        $("#instalmentCount").prop('readonly', true);
+    });
+
+    $("#year, #employee ,#enterName, #classDay").change(function () {
+        let year = $("#year").val();
+        let employee = $("#employee").val();
+        let enterName = $(`#enterName`).val();
+        let classDay = $("#classDay").val();
+        if (year && employee && enterName && classDay) {
+            $("#nameBatch").val(`${year}-${employee}-${enterName}-${classDay}`);
+        }
+    });
+
+    $("#startDate").change(function () {
+        if ($(this).val()) {
+            $("#instalmentCount").prop('readonly', false);
+        }
+    });
+
+    $("#instalmentCount").keyup(function () {
+
+        $("#instalmentTable > tbody").empty();
+
+        for (let k = 0; k < $(this).val(); k++) {
+            let startAt = $("#startDate").val();
+            $("#instalmentTable tbody").append(`
+            <tr >
+              <td >
+                ${k + 1}
+                <input type="hidden" class="form-control" name="instalmentDates[${k}].id" >
+                <input type="hidden" class="form-control" name="instalmentDates[${k}].liveDead" value="ACTIVE">
+              </td >
+              <td >
+                <input type="date" min="${startAt}" class="form-control" id="d${k}" name="instalmentDates[${k}].date" required onchange="dateValid(this)">
+              </td >
+              <td >
+                <input type="number" class="form-control amount" min="0" step="0.01" name="instalmentDates[${k}].amount" required>
+              </td >
+            </tr >
+            `);
+        }
+
+    });
+
+    function dateValid(obj) {
+        let selectedFiledId = obj.getAttribute('id').slice(1);
+        let currentDate = Date.parse($(`#d${selectedFiledId}`).val());
+
+        dateCheck(currentDate, selectedFiledId);
+        if (selectedFiledId => 1) {
+            let previousDate = Date.parse($(`#d${selectedFiledId - 1}`).val());
+            dateCheck(previousDate, selectedFiledId);
+            if (previousDate > currentDate) {
+                swal({
+                    title: "Previous filed date and this field date is not accepted",
+                    icon: "warning",
+                });
+                $(`#d${selectedFiledId}`).val($(`#d${selectedFiledId - 1}`).val());
+            }
+        }
+    }
+
+    function dateCheck(date, id) {
+        let startDate = Date.parse($("#startDate").val());
+        let endDate = Date.parse($("#endDate").val());
+
+        if ((startDate > date) || (date > endDate)) {
+            swal({
+                title: "Previous filed date and this field date is not accepted",
+                icon: "warning",
+            });
+            $(`#d${id}`).val($("#startDate").val());
+        }
+    }
+
+    $(document).on("keyup", ".amount ,#courseFee", function () {
+        let courseFee = $("#courseFee").val();
+        let sum = 0;
+        $(".amount").each(function () {
+            sum += +$(this).val();
+        });
+        console.log(parseFloat(courseFee) === parseFloat(sum))
+        if (parseFloat(courseFee) === parseFloat(sum)) {
+            $("#submit").show();
+        }else {
+            $("#submit").hide();
+        }
+
+        if (!courseFee) {
+            swal({
+                title: "Please select course fee",
+                icon: "warning",
             });
         }
+
+        if (courseFee < sum) {
+            swal({
+                title: "Instalment total is higher than course fee",
+                icon: "warning",
+            });
+        }
+
     });
 
 

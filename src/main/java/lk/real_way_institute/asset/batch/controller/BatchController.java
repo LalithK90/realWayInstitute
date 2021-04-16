@@ -13,6 +13,7 @@ import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.employee.entity.enums.Designation;
 import lk.real_way_institute.asset.employee.service.EmployeeService;
+import lk.real_way_institute.asset.instalment_date.entity.InstalmentDate;
 import lk.real_way_institute.asset.student.service.StudentService;
 import lk.real_way_institute.util.interfaces.AbstractController;
 import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
@@ -38,7 +39,8 @@ public class BatchController implements AbstractController< Batch, Integer > {
   private final StudentService studentService;
   private final BatchStudentService batchStudentService;
 
-  public BatchController(BatchService batchService, EmployeeService employeeService, MakeAutoGenerateNumberService makeAutoGenerateNumberService,
+  public BatchController(BatchService batchService, EmployeeService employeeService,
+                         MakeAutoGenerateNumberService makeAutoGenerateNumberService,
                          StudentService studentService, BatchStudentService batchStudentService) {
     this.batchService = batchService;
     this.employeeService = employeeService;
@@ -56,9 +58,9 @@ public class BatchController implements AbstractController< Batch, Integer > {
   }
 
   private String commonMethod(Model model, Batch batch, boolean addStatus) {
-   // model.addAttribute("employees",employeeService.findByDesignation(Designation.INSTRUCTOR));
+    // model.addAttribute("employees",employeeService.findByDesignation(Designation.INSTRUCTOR));
     //todo : for demo remove above ones and delete below one
-    model.addAttribute("employees",employeeService.findAll());
+    model.addAttribute("employees", employeeService.findAll());
     model.addAttribute("batch", batch);
     model.addAttribute("addStatus", addStatus);
     return "batch/addBatch";
@@ -83,6 +85,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
   @PostMapping( "/save" )
   public String persist(@Valid @ModelAttribute Batch batch, BindingResult bindingResult,
                         RedirectAttributes redirectAttributes, Model model) {
+    System.out.println(batch.getName() + " " + batch.getStartAt() + " " + batch.getEndAt() + " " + batch.getStartAt() + " " + batch.getEndAt());
     if ( batch.getId() == null ) {
       Batch batchDbDayAndStartAndEndTime =
           batchService.findByNameAndStartAtIsBetweenAndEndAtIsBetween(batch.getName()
@@ -104,10 +107,19 @@ public class BatchController implements AbstractController< Batch, Integer > {
       Batch lastBatch = batchService.lastBatchOnDB();
       if ( lastBatch != null ) {
         String lastNumber = lastBatch.getCode().substring(3);
-        batch.setCode("SSB" + makeAutoGenerateNumberService.numberAutoGen(lastNumber));
+        batch.setCode("RWB" + makeAutoGenerateNumberService.numberAutoGen(lastNumber));
       } else {
-        batch.setCode("SSB" + makeAutoGenerateNumberService.numberAutoGen(null));
+        batch.setCode("RWB" + makeAutoGenerateNumberService.numberAutoGen(null));
       }
+    }
+
+    if ( !batch.getInstalmentDates().isEmpty() ) {
+      List< InstalmentDate > instalmentDates = new ArrayList<>();
+      batch.getInstalmentDates().forEach(x -> {
+        x.setBatch(batch);
+        instalmentDates.add(x);
+      });
+      batch.setInstalmentDates(instalmentDates);
     }
 
     batchService.persist(batch);
@@ -137,7 +149,6 @@ public class BatchController implements AbstractController< Batch, Integer > {
 
     return mappingJacksonValue;
   }
-
 
 
   @GetMapping( "/id/{id}" )

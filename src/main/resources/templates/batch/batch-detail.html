@@ -40,22 +40,22 @@
       </div >
     </div>
     <div class="col-6" style="background-color:lavender;">
+    <!--  <div class="form-group" >-->
+    <!--  <label data-th-for="${year}" class="col-sm-6 control-label" >Academic Year</label >-->
+    <!--  <div class="col-sm-6" >-->
+    <!--    <p type="text" id="year" class="form-control" data-th-text="${batchDetail.year}" >-->
+    <!--  </div >-->
+    <!--</div >-->
+      <!--<div class="form-group" >-->
+      <!--  <label data-th-for="${grade}" class="col-sm-3 control-label" >Grade</label >-->
+      <!--  <div class="col-sm-6" >-->
+      <!--    <p type="text" id="grade" class="form-control" data-th-text="${batchDetail.grade}" >-->
+      <!--  </div >-->
+      <!--</div >-->
       <div class="form-group" >
-      <label data-th-for="${year}" class="col-sm-6 control-label" >Academic Year</label >
-      <div class="col-sm-6" >
-        <p type="text" id="year" class="form-control" data-th-text="${batchDetail.year}" >
-      </div >
-    </div >
-      <div class="form-group" >
-        <label data-th-for="${grade}" class="col-sm-3 control-label" >Grade</label >
+        <label data-th-for="${teacherName}" class="col-sm-3 control-label" >Instructor</label >
         <div class="col-sm-6" >
-          <p type="text" id="grade" class="form-control" data-th-text="${batchDetail.grade}" >
-        </div >
-      </div >
-      <div class="form-group" >
-        <label data-th-for="${teacherName}" class="col-sm-3 control-label" >Teacher</label >
-        <div class="col-sm-6" >
-          <p type="text" id="teacherName" class="form-control" data-th-text="${batchDetail.teacher.firstName}" >
+          <p type="text" id="teacherName" class="form-control" data-th-text="${batchDetail.employee.name}" >
         </div >
       </div >
     </div>
@@ -63,9 +63,9 @@
 
 
     <div class="row container-fluid" >
-        <div class="col-sm-2 col-sm-offset-2" >
+        <div class="col text-center" >
             <a href="/batch" >
-                <button type="link" class="btn btn-danger btn-block" >Back</button >
+                <button type="link" class="btn btn-danger " >Back</button >
             </a >
         </div >
     </div >

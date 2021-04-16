@@ -409,54 +409,18 @@ $("#invoiceFindValue").bind("keyup", function () {
     }
 });
 //custom invoice search page validation - end
-
-//search form date validation - start
-const milliSecondToDay = Date.parse(new Date());
-
-$("#startDate").bind("input", function () {
+$("#startDate, #endDate").bind("click", function () {
     let startDate = document.getElementById("startDate").value;
-
-//only start date has value
-    if (startDate.length !== 0) {
-        let milliSecondStartDate = Date.parse(startDate);
-        if (milliSecondToDay > milliSecondStartDate) {
-            backgroundColourChangeGood($(this));
-        } else {
-            backgroundColourChangeBad($(this));
-        }
-    } else {
-        backgroundColourChangeNothingToChange($(this));
-    }
-});
-
-$("#endDate").bind("input", function () {
     let endDate = document.getElementById("endDate").value;
 
-//only start date has value
     if (endDate.length !== 0) {
-        let milliSecondStartDate = Date.parse(endDate);
-        if (milliSecondToDay > milliSecondStartDate) {
-            backgroundColourChangeGood($(this));
-        } else {
-            backgroundColourChangeBad($(this));
-        }
-    } else {
-        backgroundColourChangeNothingToChange($(this));
-    }
-});
-
-$('#endDate, #startDate').on('click', function () {
-    let endValue = $('#endDate').val();
-    let startValue = $('#startDate').val();
-    console.log(" end " + endValue + "  start " + startValue);
-    if (endValue !== null) {
         $('#startDate').attr('max', $('#endDate').val());
-        console.log("1 end " + endValue + "  start " + startValue);
     }
-    if (startValue !== null) {
+    if (startDate.length !== 0) {
         $('#endDate').attr('min', $('#startDate').val());
-        console.log("2 end " + endValue + "  start " + startValue);
     }
+
+
 });
 
 $("#btnSummaryFind").bind("mouseover", function () {
@@ -533,7 +497,6 @@ let btnSearchEmployeeShow = function () {
 
 //delete all row before show objects in table
 let deleteAllTableRow = function (tableName) {
-    console.log(" come to delete");
     let table = tableName;
     let rowCount = table.rows.length;
     if (rowCount > 1) {

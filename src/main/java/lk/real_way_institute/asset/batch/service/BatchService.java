@@ -9,6 +9,7 @@ import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.util.interfaces.AbstractService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class BatchService implements AbstractService< Batch, Integer > {
   }
 
 
-  public Batch findByNameAndStartAtIsBetweenAndEndAtIsBetween(String name, LocalTime startAt, LocalTime endAt, LocalTime startAt1, LocalTime endAt1) {
+  public Batch findByNameAndStartAtIsBetweenAndEndAtIsBetween(String name, LocalDate startAt, LocalDate endAt, LocalDate startAt1, LocalDate endAt1) {
   return batchDao.findByNameAndStartAtIsBetweenAndEndAtIsBetween(name,startAt,endAt,startAt1,endAt1);
   }
 }

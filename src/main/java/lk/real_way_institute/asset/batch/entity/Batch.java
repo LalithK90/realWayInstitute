@@ -14,6 +14,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -36,16 +37,22 @@ public class Batch extends AuditEntity {
   @Enumerated( EnumType.STRING )
   private LiveDead liveDead;
 
-  @DateTimeFormat( pattern = "HH:mm" )
-  private LocalTime startAt;
+  @DateTimeFormat( pattern = "yyyy-MM-dd" )
+  private LocalDate startAt;
 
-  @DateTimeFormat( pattern = "HH:mm" )
-  private LocalTime endAt;
+  @DateTimeFormat( pattern = "yyyy-MM-dd" )
+  private LocalDate endAt;
 
   private int installmentCount;
 
-  @ManyToOne( cascade = {CascadeType.MERGE, CascadeType.PERSIST} )
-  private InstalmentDate instalmentDate;
+  private BigDecimal courseFee;
+
+
+  @ManyToOne
+  private  Employee employee;
+
+  @OneToMany( mappedBy = "batch", cascade = CascadeType.ALL)
+  private List< InstalmentDate > instalmentDates;
 
   @OneToMany( mappedBy = "batch" )
   private List< BatchStudent > batchStudents;
@@ -55,12 +62,6 @@ public class Batch extends AuditEntity {
 
   @OneToMany( mappedBy = "batch" )
   private List< BatchExam > batchExams;
-
-  @ManyToMany
-  @JoinTable( name = "batch_employee",
-      joinColumns = @JoinColumn( name = "batch_id" ),
-      inverseJoinColumns = @JoinColumn( name = "employee_id" ) )
-  private List< Employee > employees;
 
 
   @Transient
