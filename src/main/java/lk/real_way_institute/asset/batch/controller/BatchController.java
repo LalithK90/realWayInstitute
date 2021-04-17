@@ -63,6 +63,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
     model.addAttribute("employees", employeeService.findAll());
     model.addAttribute("batch", batch);
     model.addAttribute("addStatus", addStatus);
+    model.addAttribute("liveDeads", LiveDead.values());
     return "batch/addBatch";
   }
 
