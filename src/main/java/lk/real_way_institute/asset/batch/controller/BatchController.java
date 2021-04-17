@@ -8,13 +8,13 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import lk.real_way_institute.asset.batch.entity.Batch;
 import lk.real_way_institute.asset.batch.entity.enums.Grade;
 import lk.real_way_institute.asset.batch.service.BatchService;
-import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
 import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
-import lk.real_way_institute.asset.employee.entity.enums.Designation;
 import lk.real_way_institute.asset.employee.service.EmployeeService;
 import lk.real_way_institute.asset.instalment_date.entity.InstalmentDate;
 import lk.real_way_institute.asset.student.service.StudentService;
+import lk.real_way_institute.asset.subject.entity.Subject;
+import lk.real_way_institute.asset.subject.service.SubjectService;
 import lk.real_way_institute.util.interfaces.AbstractController;
 import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -36,15 +36,17 @@ public class BatchController implements AbstractController< Batch, Integer > {
   private final BatchService batchService;
   private final EmployeeService employeeService;
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
+  private final SubjectService subjectService;
   private final StudentService studentService;
   private final BatchStudentService batchStudentService;
 
   public BatchController(BatchService batchService, EmployeeService employeeService,
                          MakeAutoGenerateNumberService makeAutoGenerateNumberService,
-                         StudentService studentService, BatchStudentService batchStudentService) {
+                         SubjectService subjectService, StudentService studentService, BatchStudentService batchStudentService) {
     this.batchService = batchService;
     this.employeeService = employeeService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
+    this.subjectService = subjectService;
     this.studentService = studentService;
     this.batchStudentService = batchStudentService;
   }
@@ -52,7 +54,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
 
   @GetMapping
   public String findAll(Model model) {
-    model.addAttribute("batchs",
+    model.addAttribute("batches",
                        batchService.findAll().stream().filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE)).collect(Collectors.toList()));
     return "batch/batch";
   }
@@ -64,6 +66,13 @@ public class BatchController implements AbstractController< Batch, Integer > {
     model.addAttribute("batch", batch);
     model.addAttribute("addStatus", addStatus);
     model.addAttribute("liveDeads", LiveDead.values());
+    if ( batch.getSubjects()==null ){
+    model.addAttribute("subjects", subjectService.findAll());
+    }else {
+      List< Subject > subjects = subjectService.findAll();
+      batch.getSubjects().forEach(subjects::remove);
+      model.addAttribute("subjects", subjects);
+    }
     return "batch/addBatch";
   }
 
@@ -86,7 +95,6 @@ public class BatchController implements AbstractController< Batch, Integer > {
   @PostMapping( "/save" )
   public String persist(@Valid @ModelAttribute Batch batch, BindingResult bindingResult,
                         RedirectAttributes redirectAttributes, Model model) {
-    System.out.println(batch.getName() + " " + batch.getStartAt() + " " + batch.getEndAt() + " " + batch.getStartAt() + " " + batch.getEndAt());
     if ( batch.getId() == null ) {
       Batch batchDbDayAndStartAndEndTime =
           batchService.findByNameAndStartAtIsBetweenAndEndAtIsBetween(batch.getName()
@@ -114,7 +122,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
       }
     }
 
-    if ( !batch.getInstalmentDates().isEmpty() ) {
+    if ( batch.getInstalmentDates()!= null ) {
       List< InstalmentDate > instalmentDates = new ArrayList<>();
       batch.getInstalmentDates().forEach(x -> {
         x.setBatch(batch);
@@ -122,6 +130,15 @@ public class BatchController implements AbstractController< Batch, Integer > {
       });
       batch.setInstalmentDates(instalmentDates);
     }
+/*
+    if ( batch.getSubjects()!= null ) {
+      List< Subject > subjects = new ArrayList<>();
+      batch.getSubjects().forEach(x -> {
+        x.setBatch(batch);
+        subjects.add(x);
+      });
+      batch.setSubjects(subjects);
+    }*/
 
     batchService.persist(batch);
 
