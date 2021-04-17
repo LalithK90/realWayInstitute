@@ -6,6 +6,7 @@ import lk.real_way_institute.asset.batch.service.BatchService;
 import lk.real_way_institute.asset.batch_exam.entity.BatchExam;
 import lk.real_way_institute.asset.batch_exam.service.BatchExamService;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.employee.service.EmployeeService;
 import lk.real_way_institute.asset.student.entity.Student;
 import lk.real_way_institute.asset.student.service.StudentService;
 import lk.real_way_institute.asset.user_management.entity.User;
@@ -19,7 +20,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Controller
 @RequestMapping( "/batchExam" )
@@ -27,17 +30,20 @@ public class BatchExamController {
   private final BatchService batchService;
   private final BatchExamService batchExamService;
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
-
   private final UserService userService;
+  private final EmployeeService employeeService;
   private final StudentService studentService;
   private final EmailService emailService;
 
   public BatchExamController(BatchService batchService, BatchExamService batchExamService,
-                             MakeAutoGenerateNumberService makeAutoGenerateNumberService, UserService userService, StudentService studentService, EmailService emailService) {
+                             MakeAutoGenerateNumberService makeAutoGenerateNumberService, UserService userService,
+                             EmployeeService employeeService, StudentService studentService,
+                             EmailService emailService) {
     this.batchService = batchService;
     this.batchExamService = batchExamService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
     this.userService = userService;
+    this.employeeService = employeeService;
     this.studentService = studentService;
     this.emailService = emailService;
   }
@@ -55,11 +61,11 @@ public class BatchExamController {
     User user = userService.findByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
 
 
-      model.addAttribute("batchExams",
-                         batchExamService.findAll()
-                             .stream()
-                             .filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE))
-                             .collect(Collectors.toList()));
+    model.addAttribute("batchExams",
+                       batchExamService.findAll()
+                           .stream()
+                           .filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE))
+                           .collect(Collectors.toList()));
 
     return "batchExam/batchExam";
   }
@@ -79,17 +85,20 @@ public class BatchExamController {
   @GetMapping( "/view/{id}" )
   public String findById(@PathVariable Integer id, Model model) {
     BatchExam batchExam = batchExamService.findById(id);
-   /* Teacher teacher = teacherService.findById(batchExam.getBatch().getTeacher().getId());
-    model.addAttribute("teacherDetail", teacher);*/
+    model.addAttribute("employeeDetail", employeeService.findById(batchExam.getBatch().getEmployee().getId()));
     model.addAttribute("batchExamDetail", batchExam);
-//    model.addAttribute("subjectDetail", teacher.getSubject());
+    model.addAttribute("subjectDetail", batchExam.getSubject());
     return "batchExam/batchExam-detail";
   }
 
   @GetMapping( "/edit/{id}" )
   public String edit(@PathVariable Integer id, Model model) {
     BatchExam batchExam = batchExamService.findById(id);
-    model.addAttribute("batchExams", batchService.findById(batchExam.getBatch().getId()).getBatchExams());
+
+    List< BatchExam > batchExams = batchService.findById(batchExam.getBatch().getId()).getBatchExams();
+    batchExams.remove(batchExam);
+
+    model.addAttribute("batchExams", batchExams);
     model.addAttribute("batchDetail", batchExam.getBatch());
     model.addAttribute("batchExam", batchExam);
     model.addAttribute("addStatus", true);
@@ -116,9 +125,10 @@ public class BatchExamController {
     batchService.findById(batchExamDb.getBatch().getId()).getBatchStudents().forEach(x -> {
       Student student = studentService.findById(x.getStudent().getId());
       if ( student.getEmail() != null ) {
-        String message = "Dear " + student.getName() + "\n Your " + batchService.findById( batchExamDb.getBatch().getId()).getName() + " exam " +
-            "would be held from " + batchExamDb.getStartAt() + " to " + batchExamDb.getEndAt() + ".\n Thanks \n " +
-            "Success Student";
+        String message =
+            "Dear " + student.getName() + "\n Your batch " + batchService.findById(batchExamDb.getBatch().getId()).getName() + " subject " + batchExamDb.getSubject().getName() + "'s exam " +
+                "would be held from " + batchExamDb.getStartAt() + " to " + batchExamDb.getEndAt() + ".\n Thanks \n " +
+                "Success Student";
         emailService.sendEmail(student.getEmail(), "Exam - Notification", message);
       }
     });

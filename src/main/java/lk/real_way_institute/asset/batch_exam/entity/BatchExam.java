@@ -5,6 +5,7 @@ import lk.real_way_institute.asset.batch.entity.Batch;
 import lk.real_way_institute.asset.batch_exam.entity.enums.ExamStatus;
 import lk.real_way_institute.asset.batch_student_exam_result.entity.BatchStudentExamResult;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.subject.entity.Subject;
 import lk.real_way_institute.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,6 +44,9 @@ public class BatchExam extends AuditEntity {
 
   @ManyToOne
   private Batch batch;
+
+  @ManyToOne
+  private Subject subject;
 
   @OneToMany(mappedBy = "batchExam")
   private List< BatchStudentExamResult > batchStudentExamResults;

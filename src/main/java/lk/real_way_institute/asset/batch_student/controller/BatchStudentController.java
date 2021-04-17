@@ -6,6 +6,7 @@ import lk.real_way_institute.asset.batch.service.BatchService;
 import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
 import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.employee.service.EmployeeService;
 import lk.real_way_institute.asset.student.entity.Student;
 import lk.real_way_institute.asset.student.service.StudentService;
 import org.springframework.stereotype.Controller;
@@ -22,12 +23,14 @@ public class BatchStudentController {
   private final BatchService batchService;
   private final BatchStudentService batchStudentService;
   private final StudentService studentService;
+  private final EmployeeService employeeService;
 
   public BatchStudentController(BatchService batchService, BatchStudentService batchStudentService,
-                                StudentService studentService) {
+                                StudentService studentService, EmployeeService employeeService) {
     this.batchService = batchService;
     this.batchStudentService = batchStudentService;
     this.studentService = studentService;
+    this.employeeService = employeeService;
   }
 
   @GetMapping
@@ -80,6 +83,7 @@ public class BatchStudentController {
 
     model.addAttribute("students", registeredStudent);
     model.addAttribute("studentRemoveBatch", true);
+    model.addAttribute("employeeDetail", employeeService.findById(batch.getEmployee().getId()));
 
 
     if ( addStatus ) {
