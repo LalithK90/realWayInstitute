@@ -55,7 +55,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
   @GetMapping
   public String findAll(Model model) {
     model.addAttribute("batches",
-                       batchService.findAll().stream().filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE)).collect(Collectors.toList()));
+                       batchService.findAll());
     return "batch/batch";
   }
 
@@ -130,15 +130,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
       });
       batch.setInstalmentDates(instalmentDates);
     }
-/*
-    if ( batch.getSubjects()!= null ) {
-      List< Subject > subjects = new ArrayList<>();
-      batch.getSubjects().forEach(x -> {
-        x.setBatch(batch);
-        subjects.add(x);
-      });
-      batch.setSubjects(subjects);
-    }*/
+
 
     batchService.persist(batch);
 

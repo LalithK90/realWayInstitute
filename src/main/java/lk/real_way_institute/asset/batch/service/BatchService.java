@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BatchService implements AbstractService< Batch, Integer > {
@@ -22,7 +23,7 @@ public class BatchService implements AbstractService< Batch, Integer > {
   }
 
   public List< Batch > findAll() {
-    return batchDao.findAll();
+    return batchDao.findAll().stream().filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE)).collect(Collectors.toList());
   }
 
   public Batch findById(Integer id) {
