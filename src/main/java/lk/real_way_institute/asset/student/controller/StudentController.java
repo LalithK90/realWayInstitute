@@ -2,12 +2,14 @@ package lk.real_way_institute.asset.student.controller;
 
 
 import lk.real_way_institute.asset.batch.controller.BatchController;
+import lk.real_way_institute.asset.batch.entity.Batch;
 import lk.real_way_institute.asset.batch.service.BatchService;
 import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
 import lk.real_way_institute.asset.common_asset.model.enums.Gender;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.student.entity.Student;
 import lk.real_way_institute.asset.student.service.StudentService;
+import lk.real_way_institute.asset.subject.entity.Subject;
 import lk.real_way_institute.util.interfaces.AbstractController;
 import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
 import org.springframework.stereotype.Controller;
@@ -22,14 +24,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-  @RequestMapping( "/student" )
+@RequestMapping( "/student" )
 public class StudentController implements AbstractController< Student, Integer > {
   private final StudentService studentService;
   private final BatchService batchService;
   private final BatchStudentService batchStudentService;
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
 
-  public StudentController(StudentService studentService, BatchService batchService, BatchStudentService batchStudentService,
+  public StudentController(StudentService studentService, BatchService batchService,
+                           BatchStudentService batchStudentService,
                            MakeAutoGenerateNumberService makeAutoGenerateNumberService) {
     this.studentService = studentService;
     this.batchService = batchService;
@@ -52,7 +55,14 @@ public class StudentController implements AbstractController< Student, Integer >
     model.addAttribute("student", student);
     model.addAttribute("addStatus", addStatus);
     model.addAttribute("liveDeads", LiveDead.values());
-model.addAttribute("batches", batchService.findAll());
+    if ( student.getBatchStudents() == null ) {
+      model.addAttribute("batches", batchService.findAll());
+    } else {
+      List< Batch > batches = batchService.findAll();
+      student.getBatchStudents().forEach(x -> batches.remove(x.getBatch()));
+      model.addAttribute("batches", batches);
+    }
+
     model.addAttribute("gender", Gender.values());
     model.addAttribute("batchUrl", MvcUriComponentsBuilder
         .fromMethodName(BatchController.class, "findByBatchId", "")
