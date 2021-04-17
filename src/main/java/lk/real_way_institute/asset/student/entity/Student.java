@@ -27,9 +27,10 @@ public class Student extends AuditEntity {
 
   private String regNo;
 
-  private String firstName;
+  private String name;
 
-  private String lastName;
+  @Column(unique = true)
+  private String nic;
 
   @Enumerated( EnumType.STRING )
   private Gender gender;
@@ -39,9 +40,6 @@ public class Student extends AuditEntity {
 
   private String address;
 
-  private String city;
-
-  private String guardian;
 
   private String mobile;
 
@@ -52,9 +50,6 @@ public class Student extends AuditEntity {
 
   @Enumerated( EnumType.STRING )
   private LiveDead liveDead;
-
-  @Enumerated( EnumType.STRING )
-  private Grade grade;
 
 
   @OneToMany(mappedBy = "student",cascade ={ CascadeType.MERGE, CascadeType.PERSIST})

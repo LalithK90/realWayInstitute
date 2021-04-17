@@ -13,5 +13,4 @@ public interface StudentDao extends JpaRepository< Student, Integer > {
 
     Student findFirstByOrderByIdDesc();
 
-  List< Student> findByGrade(Grade grade);
 }

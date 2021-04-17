@@ -182,7 +182,7 @@ public class PaymentController {
     Student studentDb = studentService.findById(student.getId());
     if ( studentDb.getEmail() != null ) {
       String message =
-          "Dear " + studentDb.getFirstName() + "\n Your following payment was accepted\n" + paymentInfo + "\n Thanks " +
+          "Dear " + studentDb.getName() + "\n Your following payment was accepted\n" + paymentInfo + "\n Thanks " +
               "\n\n Success Student";
       emailService.sendEmail(studentDb.getEmail(), "Payment - Notification", message);
     }

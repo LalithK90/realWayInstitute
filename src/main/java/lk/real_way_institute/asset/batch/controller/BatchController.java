@@ -144,33 +144,17 @@ public class BatchController implements AbstractController< Batch, Integer > {
     return "redirect:/batch";
   }
 
-  @GetMapping( "/{grade}" )
-  @ResponseBody
-  public MappingJacksonValue findByGrade(@PathVariable( "grade" ) Grade grade) {
-    MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(batchService.findById(1));
-
-    SimpleBeanPropertyFilter forBatch = SimpleBeanPropertyFilter
-        .filterOutAllExcept("id", "name");
-
-    FilterProvider filters = new SimpleFilterProvider()
-        .addFilter("Batch", forBatch);
-
-    mappingJacksonValue.setFilters(filters);
-
-    return mappingJacksonValue;
-  }
-
 
   @GetMapping( "/id/{id}" )
   @ResponseBody
-  public MappingJacksonValue findById(@PathVariable( "id" ) Integer id) {
+  public MappingJacksonValue findByBatchId(@PathVariable( "id" ) Integer id) {
     MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(batchService.findById(id));
 
     SimpleBeanPropertyFilter forTeacher = SimpleBeanPropertyFilter
-        .filterOutAllExcept("id", "firstName", "fee");
+        .filterOutAllExcept("id", "name", "courseFee");
 
     FilterProvider filters = new SimpleFilterProvider()
-        .addFilter("Teacher", forTeacher);
+        .addFilter("Batch", forTeacher);
 
     mappingJacksonValue.setFilters(filters);
 

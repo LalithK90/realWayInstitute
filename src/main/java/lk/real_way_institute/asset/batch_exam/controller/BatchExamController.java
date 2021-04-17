@@ -116,7 +116,7 @@ public class BatchExamController {
     batchService.findById(batchExamDb.getBatch().getId()).getBatchStudents().forEach(x -> {
       Student student = studentService.findById(x.getStudent().getId());
       if ( student.getEmail() != null ) {
-        String message = "Dear " + student.getFirstName() + "\n Your " + batchService.findById( batchExamDb.getBatch().getId()).getName() + " exam " +
+        String message = "Dear " + student.getName() + "\n Your " + batchService.findById( batchExamDb.getBatch().getId()).getName() + " exam " +
             "would be held from " + batchExamDb.getStartAt() + " to " + batchExamDb.getEndAt() + ".\n Thanks \n " +
             "Success Student";
         emailService.sendEmail(student.getEmail(), "Exam - Notification", message);

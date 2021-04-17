@@ -55,7 +55,5 @@ public class StudentService implements AbstractService< Student, Integer > {
         return studentDao.findFirstByOrderByIdDesc();
     }
 
-  public List< Student > findByGrade(Grade grade) {
-      return studentDao.findByGrade(grade);
-  }
+
 }

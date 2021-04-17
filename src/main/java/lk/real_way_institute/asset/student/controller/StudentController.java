@@ -2,7 +2,7 @@ package lk.real_way_institute.asset.student.controller;
 
 
 import lk.real_way_institute.asset.batch.controller.BatchController;
-import lk.real_way_institute.asset.batch.entity.enums.Grade;
+import lk.real_way_institute.asset.batch.service.BatchService;
 import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
 import lk.real_way_institute.asset.common_asset.model.enums.Gender;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
@@ -25,12 +25,14 @@ import java.util.stream.Collectors;
   @RequestMapping( "/student" )
 public class StudentController implements AbstractController< Student, Integer > {
   private final StudentService studentService;
+  private final BatchService batchService;
   private final BatchStudentService batchStudentService;
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
 
-  public StudentController(StudentService studentService, BatchStudentService batchStudentService,
+  public StudentController(StudentService studentService, BatchService batchService, BatchStudentService batchStudentService,
                            MakeAutoGenerateNumberService makeAutoGenerateNumberService) {
     this.studentService = studentService;
+    this.batchService = batchService;
     this.batchStudentService = batchStudentService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
   }
@@ -49,12 +51,11 @@ public class StudentController implements AbstractController< Student, Integer >
   private String commonThing(Model model, Student student, boolean addStatus) {
     model.addAttribute("student", student);
     model.addAttribute("addStatus", addStatus);
-    model.addAttribute("grades", Grade.values());
     model.addAttribute("liveDeads", LiveDead.values());
-
+model.addAttribute("batches", batchService.findAll());
     model.addAttribute("gender", Gender.values());
     model.addAttribute("batchUrl", MvcUriComponentsBuilder
-        .fromMethodName(BatchController.class, "findByGrade", "")
+        .fromMethodName(BatchController.class, "findByBatchId", "")
         .build()
         .toString());
     return "student/addStudent";
