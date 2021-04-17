@@ -9,40 +9,54 @@
 <!--Nav bar is included-->
 <nav data-th-replace="~{fragments/navBar :: navBarFragment}" ></nav >
 
-<div class="row bg-secondary" >
-  <div class="col-4" >
-    <a href="/timeTable/add" >
-      <button class="btn btn-info" >New Time Slot Add</button >
-    </a >
-  </div >
-  <div class="col-4" >
-    <h1 >Choose Date To Time Table</h1 >
-  </div >
-  <div class="col-4" >
-    <a href="/timeTable" >
-      <button class="btn btn-primary" >View All Student</button >
-    </a >
+<div class="container-fluid text-center" >
+  <div class="row " >
+    <div class="col" >
+      <a href="/timeTable" >
+        <button class="btn btn-info" >Time Table</button >
+      </a >
+    </div >
+    <div class="col" >
+      <h3 >Choose Date To Time Table</h3 >
+    </div >
+    <div class="col" >
+      <a href="/batch" >
+        <button class="btn btn-primary" >View Batch</button >
+      </a >
+    </div >
   </div >
 </div >
-<!--Student detail-->
+
+
+<!--Student search detail-->
 <div class="container-fluid" data-th-fragment="timeTableDetail" >
-  <form action="/timeTable/add" method="post" >
-    <!--Date-->
-    <div class="form-row text-right" >
-      <div class="col-md-4" >
-        <label class="control-label" for="date" >Date:</label >
+  <div class="container" >
+    <form action="/timeTable/add" method="post" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" for="batch" >Course Name:</label >
+        </div >
+        <div class="col-md-8" >
+          <select type="date" name="id" id="batch" class="form-control" required >
+            <option value="" >Please Select</option >
+            <option data-th-each="batch : ${batches}" data-th-text="${batch.name}"
+                    data-th-value="${batch.id}" ></option >
+          </select >
+        </div >
       </div >
-      <div class="col-md-8" >
-        <input type="date" name="date" id="date" class="form-control" required >
+      <!--Button-->
+      <div class="form-batch col-md-12 col-sm-12 text-center flex-column " >
+        <button class="btn btn-success" tabindex="21" type="submit" >
+          Send
+        </button >
       </div >
+    </form >
+  </div >
+  <div class="row" >
+    <div class="col" >
+      [[${message}]]
     </div >
-    <!--Button-->
-    <div class="form-batch col-md-12 col-sm-12 text-center flex-column " >
-      <button class="btn btn-success" tabindex="21" type="submit" >
-        Send
-      </button >
-    </div >
-  </form >
+  </div >
 </div >
 <!--footer is included-->
 <div data-th-replace="~{fragments/footer :: footerFragment}" ></div >

@@ -8,39 +8,100 @@
 <body >
 
 <!--Nav bar is included-->
-<nav data-th-replace="~{fragments/navBar :: navBarFragment}"></nav>
+<nav data-th-replace="~{fragments/navBar :: navBarFragment}" ></nav >
 
-<div class="row bg-link">
-  <div class="col-4">
+<div class="row bg-link" >
+  <div class="col-4" >
 
-  </div>
-  <div class="col-4">
-    <h1>Timetable Management</h1>
-  </div>
-  <div class="col-4">
-    <a href="/timeTable/add">
-      <button class="btn btn-primary" align="center">New Time</button>
-    </a>
-  </div>
-</div>
+  </div >
+  <div class="col-4" >
+    <h1 >Time Table Management</h1 >
+  </div >
+  <div class="col-4" >
+    <a href="/timeTable/add" >
+      <button class="btn btn-primary" align="center" >New Time</button >
+    </a >
+  </div >
+</div >
 <div class="container-fluid" >
-  <form action="/timeTable/save" data-th-object="${batches}" method="post" >
-
+  <!--batch details-->
+  <div class="row mb-2" >
     <div class="container-fluid" >
-      <table class="table table-responsive" id="timeTable" >
+      <div class="row" >
+        <div class="col text-center" >
+          <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample5" role="button"
+             aria-expanded="false" aria-controls="multiCollapseExample5" >Batch Detail</a >
+        </div >
+      </div >
+      <div class="row" >
+        <div class="col-12" >
+          <div class="collapse multi-collapse" id="multiCollapseExample5" >
+            <div class="card card-body" >
+              <div data-th-replace="~{batch/batch-detail :: batchDetailsFragment}" ></div >
+            </div >
+          </div >
+        </div >
+      </div >
+    </div >
+  </div >
+  <!--Time Table create-->
+  <div class="row mb-2" >
+    <form >
+      <div class="container-fluid" >
+        <div class="row" >
+          <div class="form-group" >
+            <label for="subject" >Subject : </label >
+            <select type="text" name="" id="subject" class="form-control" required >
+              <option value="" >Please Choose</option >
+              <option data-th-each="subject : ${subjects}"
+                      data-th-value="${subject.id}"
+                      data-th-text="${subject.name}" ></option >
+            </select >
+          </div >
+          <div class="form-group" >
+            <label for="lesson" >Lesson : </label >
+            <input type="text" name="" id="lesson" class="form-control" placeholder="" required >
+          </div >
+          <div class="form-group" >
+            <label for="slotStartDate" >Start Date Time At : </label >
+            <div class="form-inline" >
+              <input type="date" name="" id="slotStartDate" class="form-control" placeholder="" required >
+              <input type="time" name="" id="slotStartTime" min="08:00" max="17:00" step="900" class="form-control"
+                     placeholder="" required >
+            </div >
+          </div >
+          <div class="form-group" >
+            <label for="slotEndTime" >End At : </label >
+            <div class="form-inline" >
+              <input type="time" name="" id="slotEndTime" min="08:00" max="17:00" step="900" class="form-control"
+                     placeholder="" required >
+            </div >
+          </div >
+          <div class="form-group" >
+            <label for="slotEnd" class="mt-2" ></label >
+            <br >
+            <button type="submit" id="btnAdd" class="btn btn-info mt-5 ml-2" >Add</button >
+          </div >
+        </div >
+      </div >
+    </form >
+  </div >
+  <form action="/timeTable/save" data-th-object="${batch}" method="post" >
+    <p class="text-center h3" > Selected Time Slot</p >
+    <div class="container-fluid" >
+      <table class="table table-hover" id="timeTable" >
         <tr >
-          <th data-th-if="${!addStatus}" >Index</th >
-          <th data-th-if="${!addStatus}" >Code</th >
+          <th >Index</th >
           <th >Batch Name</th >
-          <th >Student Count</th >
+          <th >Subject Name</th >
           <th >Lesson</th >
           <th >Start At</th >
           <th >End At</th >
-          <th >Hall</th >
-          <th data-th-if="${!addStatus}" >Activity</th >
-          <th data-th-if="${!addStatus}" >Comment</th >
+          <th >Activity</th >
+          <th >Comment</th >
+          <th >Modify</th >
         </tr >
-        <tr data-th-each="batch, index : ${batches.timeTables}" >
+        <tr data-th-each="batch, index : ${batchDetail.timeTables}" >
           <th data-th-if="${!addStatus}" data-th-text="${index.count}" ></th >
           <th data-th-if="${!addStatus}" >
             <input type="text" class="form-control" data-th-name="${'batches.timeTables[__${index.index}__].code'}"
@@ -77,17 +138,7 @@
                    data-th-name="${'timeTables[__${index.index}__].endAt'}"
                    data-th-value="${batches.timeTables[__${index.index}__].endAt}" required >
           </th >
-          <th >
-            <select data-th-name="${'timeTables[__${index.index}__].hall.id'}"
-                    data-th-id="${'hAt'+index.index}"
-                    data-th-value="${batches.timeTables[__${index.index}__].hall}" required
-                    class="form-control hall" >
-              <option value="" >Please select</option >
-              <option data-th-each="hall : ${halls}"
-                      data-th-value="${hall.id}"
-                      data-th-text="${'Hall Number : '+hall.number+' Seats : '+ hall.seatCount}" ></option >
-            </select >
-          </th >
+
           <th data-th-if="${!addStatus}" >
             <div class="col" >
               <div class="custom-control custom-checkbox custom-control-inline "
@@ -123,101 +174,101 @@
   </form >
 </div >
 
-<input type="hidden" data-th-value="${date}" id="date" >
+<input type="hidden" data-th-value="${batchDetail.name}" id="batchName" >
+<input type="hidden" data-th-value="${batchDetail.startAt}" id="batchStartAt" >
+<input type="hidden" data-th-value="${batchDetail.endAt}" id="batchEndAt" >
+<input type="hidden" data-th-value="${batchDetail.id}" id="batchId" >
 
 <!--footer is included-->
 <div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
 <!--script is included-->
 <div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
 <script >
-    let timeTableSlots = [];
-    let date = $("#date").val();
     $(document).ready(function () {
-        let max = date + "T20:00";
-        let min = date + "T06:00";
-        $(".startAt, .endAt").attr({'max': max, 'min': min});
-        let timeSlot = {};
-        for (let x = 0; x < $('#timeTable tr').length - 1; x++) {
-            timeSlot.id = x;
-            timeSlot.sAt = $(`#sAt${x}`).val();
-            timeSlot.eAt = $(`#eAt${x}`).val();
-            timeSlot.hAt = $(`#hAt${x}`).val();
-            timeTableSlots.push(timeSlot);
-            timeSlot = {};
+        $('[type="date"]').prop('min', function () {
+            return new Date().toJSON().split('T')[0];
+        });
+        let startDate = $("#batchStartAt").val();
+        let endDate = $("#batchEndAtAt").val();
+        $("#slotStartDate").attr('min', startDate).attr('max', endDate);
+
+
+    });
+    $("#slotStartTime, #slotEndTime").change(function () {
+        let slotStartDate = $("#slotStartDate").val();
+
+        let startTime = $("#slotStartTime").val();
+        let endTime = $("#slotEndTime").val();
+        if (startTime && endTime) {
+            let startDateTime = slotStartDate + "T" + startTime;
+            let endDateTime = slotStartDate + "T" + endTime;
+
+            if (Date.parse(startDateTime) > Date.parse(endDateTime)) {
+                swal({
+                    title: "Could you accept this time period.. !",
+                    icon: "warning",
+                });
+                $("#slotStartTime").addClass("bg-warning");
+                $("#slotEndTime").addClass("bg-warning");
+            } else {
+                $("#slotStartTime").removeClass("bg-warning");
+                $("#slotEndTime").removeClass("bg-warning");
+            }
         }
+    })
 
-        if (timeTableSlots.length >= 1) {
-            $(".startAt, .endAt,.hall").bind('change', function () {
+    let timeTableSlots = [];
 
-                    let selectedFiledId = $(this).attr('id').slice(3);
-                    let startAt = $(`#sAt${selectedFiledId}`).val();
-                    let endAt = $(`#eAt${selectedFiledId}`).val();
-                    let hallValue = $(`#hAt${selectedFiledId}`).val();
-
-                    if (startAt && endAt) {
-                        if (Date.parse(startAt) > Date.parse(endAt)) {
-                            swal({
-                                title: "Could you accept those days.. !",
-                                icon: "warning",
-                                text: "Please check your date \n start at can not be less than end at",
-                            })
-                            $(`#sAt${selectedFiledId}`).addClass('bg-danger').removeClass('bg-success bg-white');
-                            $(`#eAt${selectedFiledId}`).val('').addClass('bg-danger').removeClass('bg-success bg-white');
-                        } else if (hallValue) {
-                            let timeSlot = {};
-                            let timeTableSlotsLength = timeTableSlots.length;
-                            timeSlot.id = parseInt(selectedFiledId);
-                            timeSlot.sAt = startAt;
-                            timeSlot.eAt = endAt;
-                            timeSlot.hAt = hallValue;
-                            for (let y = 0; y < timeTableSlotsLength; y++) {
-                                console.log(timeSlot)
-                                if (timeTableSlots[y].sAt === timeSlot.sAt && timeTableSlots[y].eAt === timeSlot.eAt && timeTableSlots[y].hAt === timeSlot.hAt) {
-                                    swal({
-                                        title: "Could you accept those days.. !",
-                                        icon: "warning",
-                                        text: "Please check your date selected data \n This time slot and hall is already allocate another slot ",
-                                    })
-                                    $(`#sAt${selectedFiledId}, #eAt${selectedFiledId}, #hAt${selectedFiledId} `).val('').addClass('bg-danger').removeClass('bg-success bg-white');
-                                    return -1;
-                                } else if (timeTableSlots[y].id === timeSlot.id) {
-                                    timeTableSlots[y].id = timeSlot.id;
-                                    timeTableSlots[y].sAt = timeSlot.sAt;
-                                    timeTableSlots[y].eAt = timeSlot.eAt;
-                                    timeTableSlots[y].hAt = timeSlot.hAt;
-                                    timeSlot = {};
-                                }
-                            }
-                        } else {
-                            $(`#sAt${selectedFiledId}, #eAt${selectedFiledId}`).addClass('bg-success').removeClass('bg-danger bg-white');
-                        }
-                    } else {
-                        $(`#sAt${selectedFiledId}, #eAt${selectedFiledId}`).addClass('bg-white').removeClass('bg-success bg-danger');
-                    }
-                }
-            )
+    $("#btnAdd").click(function () {
+        let subjectId = $("#subject").val();
+        let selectedItemId = `#subject option[value='${subjectId}']`;
+        let subjectName = $(selectedItemId).html();
+        let lesson = $("#lesson").val();
+        let slotStartDate = $("#slotStartDate").val();
+        let startTime = slotStartDate + "T" + $("#slotStartTime").val();
+        let endTime = slotStartDate + "T" + $("#slotEndTime").val();
+        let batchName = $("#batchName").val();
+        let batchId = $("#batchId").val();
+        console.log(subjectId + " dd  " + " dds  " + subjectName + " sas " + lesson + " le " + startTime + " sta " + " ed " + endTime)
+        if (subjectId && subjectName && lesson && startTime && endTime && batchName && batchId) {
+            let timeTableSlot = {};
+            timeTableSlot.batch_id = batchId;
+            timeTableSlot.batch_name = batchName;
+            timeTableSlot.subject_id = subjectId;
+            timeTableSlot.subject_name = subjectName;
+            timeTableSlot.lesson = lesson;
+            timeTableSlot.start_at = startTime;
+            timeTableSlot.end_at = endTime;
+            timeTableSlot.activity = 'ACTIVE';
+            timeTableSlots.push(timeTableSlot);
+            tableRowAdd();
         } else {
             swal({
-                title: `${date}`,
                 icon: "warning",
-                text: "There is no registered batches to add time table on .. !",
-                buttons: {
-                    text: "Go to Date",
-                },
-            }).then((value) => {
-                if (value) {
-                    location.replace(document.location.origin + '/timeTable/add')
-                }
+                text: "Please enter all data before click this button",
             });
+
         }
     });
 
-    /*
-         $('[type="date"]').prop('max', function () {
-            return new Date().toJSON().split('T')[0];
-        });
+    function tableRowAdd() {
+        const sortedTimeTableSlots = timeTableSlots.sort((a, b) => b.start_at - a.start_at)
+        console.log(timeTableSlots);
+        console.log(sortedTimeTableSlots);
+    }
 
-     */
+    /* swal({
+         title: `${date}`,
+         icon: "warning",
+         text: "There is no registered batches to add time table on .. !",
+         buttons: {
+             text: "Go to Date",
+         },
+     }).then((value) => {
+         if (value) {
+             // location.replace(document.location.origin + '/timeTable/add')
+         }
+     });*/
 </script >
 </body >
 </html >

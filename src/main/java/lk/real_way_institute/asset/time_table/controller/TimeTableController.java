@@ -10,14 +10,15 @@ import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.student.entity.Student;
 import lk.real_way_institute.asset.student.service.StudentService;
 import lk.real_way_institute.asset.subject.service.SubjectService;
-import lk.real_way_institute.asset.time_table.entity.TimeTable;
+import lk.real_way_institute.asset.time_table.entity.*;
 import lk.real_way_institute.asset.time_table.service.TimeTableService;
 import lk.real_way_institute.asset.user_management.entity.User;
-import lk.real_way_institute.asset.user_management.service.UserService;
+import lk.real_way_institute.asset.user_management.service.*;
 import lk.real_way_institute.util.service.DateTimeAgeService;
 import lk.real_way_institute.util.service.EmailService;
 import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +49,7 @@ public class TimeTableController {
 
 
   public TimeTableController(TimeTableService timeTableService,
-                             SubjectService subjectService,  BatchService batchService,
+                             SubjectService subjectService, BatchService batchService,
                              BatchStudentService batchStudentService,
                              MakeAutoGenerateNumberService makeAutoGenerateNumberService,
                              DateTimeAgeService dateTimeAgeService, UserService userService,
@@ -105,20 +106,15 @@ public class TimeTableController {
 
 
   @GetMapping( "/add" )
-  public String form() {
+  public String form(Model model) {
+    model.addAttribute("batches", batchService.findAll());
     return "timeTable/dateChooser";
   }
 
 
   @PostMapping( "/add" )
-  public String form(@RequestParam( "date" ) @DateTimeFormat( pattern = "yyyy-MM-dd" ) LocalDate date, Model model) {
-    LocalDate today = LocalDate.now();
-    //month
-    Month month = today.getMonth();
-//Day of week
-    String dayOfWeek = date.getDayOfWeek().toString();
-
-    return commonThing(model, date, true);
+  public String form(                     @RequestParam( "id" ) Integer id, Model model) {
+    return commonThing(model,  id, true);
   }
 
   @GetMapping( "/view/{id}" )
@@ -136,22 +132,23 @@ public class TimeTableController {
     return "timeTable/timeTable-detail";
   }
 
-  @GetMapping( "/edit/{date}" )
-  public String editGet(@PathVariable( "date" ) @DateTimeFormat( pattern = "yyyy-MM-dd" ) LocalDate date, Model model) {
-    return commonThing(model, date, false);
+  @GetMapping( "/edit/{id}" )
+  public String editGet(                        @RequestParam( "id" ) Integer id,  Model model) {
+    return commonThing(model, id, false);
   }
 
   @PostMapping( "/edit" )
-  public String editPost(@RequestParam( "date" ) @DateTimeFormat( pattern = "yyyy-MM-dd" ) LocalDate date,
+  public String editPost(
+                         @RequestParam( "id" ) Integer id,
                          Model model) {
-    return commonThing(model, date, false);
+    return commonThing(model,  id,false);
   }
 
   @PostMapping( "/save" )
   public String persist(@Valid @ModelAttribute Batch batch, BindingResult bindingResult, Model model) {
     if ( bindingResult.hasErrors() ) {
       System.out.println(bindingResult.toString());
-      return commonThing(model, batch.getDate(), true);
+      return commonThing(model, batch.getId(),true );
     }
 
     for ( TimeTable timeTable : batch.getTimeTables() ) {
@@ -163,11 +160,13 @@ public class TimeTableController {
           timeTable.setCode("SSTM" + makeAutoGenerateNumberService.numberAutoGen(lastTimeTable.getCode().substring(4)).toString());
         }
       }
-     TimeTable timeTableDb = timeTableService.persist(timeTable);
-      timeTableDb.getBatch().getBatchStudents().forEach(x->{
+      TimeTable timeTableDb = timeTableService.persist(timeTable);
+      timeTableDb.getBatch().getBatchStudents().forEach(x -> {
         Student student = studentService.findById(x.getId());
-        if(student.getEmail()!=null){
-          String message = "Dear "+ student.getName()+"\n Your "+timeTableDb.getBatch().getName()+" class would be held from "+ timeTableDb.getStartAt()+" to "+ timeTableDb.getEndAt() +"\n Thanks \n Success Student";
+        if ( student.getEmail() != null ) {
+          String message = "Dear " + student.getName() + "\n Your " + timeTableDb.getBatch().getName() + " class " +
+              "would be held from " + timeTableDb.getStartAt() + " to " + timeTableDb.getEndAt() + "\n Thanks \n " +
+              "Success Student";
           emailService.sendEmail(student.getEmail(), "Time Table - Notification", message);
         }
       });
@@ -178,41 +177,20 @@ public class TimeTableController {
 
   }
 
-  private String commonThing(Model model, LocalDate date, boolean addStatus) {
+  private String commonThing(Model model, Integer id, boolean addStatus) {
 
-    LocalDateTime from = dateTimeAgeService.dateTimeToLocalDateStartInDay(date);
-    LocalDateTime to = dateTimeAgeService.dateTimeToLocalDateEndInDay(date);
+    Batch batch = batchService.findById(id);
 
+    if ( batch.getEndAt().equals(LocalDate.now()) ) {
+      model.addAttribute("message", " There is no requirement to create new time table, because to day is finished this course");
+      model.addAttribute("batches", batchService.findAll());
+      return "timeTable/dateChooser";
+    }
 
-    List< Batch > batches = new ArrayList<>();
-
-   Batch batchSend = new Batch();
-//    if ( addStatus ) {
-//      String dayOfWeek = date.getDayOfWeek().toString();
-//      //Day of week
-//      for ( Batch batch : batchService.findByClassDay(ClassDay.valueOf(dayOfWeek))
-//          .stream()//filter by using batch and in timeTable
-//          .filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE) && timeTableService.availableTimeTableCheck(from, to, x))
-//          .collect(Collectors.toList()) ) {
-//        batch.setCount(batchStudentService.countByBatch(batch));
-//        batches.add(batch);
-//      }
-//      List< TimeTable > timeTables = new ArrayList<>();
-//      for ( Batch batch1 : batches ) {
-//        TimeTable timeTable = new TimeTable();
-//        timeTable.setBatch(batch1);
-//        timeTables.add(timeTable);
-//      }
-//      batchSend.setTimeTables(timeTables);
-//    } else {
-//      List< TimeTable > timeTables = timeTableService.findByCreatedAtIsBetween(from, to);
-//      batchSend.setTimeTables(timeTables);
-//    }
-
-
-    model.addAttribute("batches", batchSend);
+    model.addAttribute("batch", batch);
+    model.addAttribute("subjects", batch.getSubjects());
+    model.addAttribute("batchDetail", batch);
     model.addAttribute("addStatus", addStatus);
-    model.addAttribute("date", date);
     model.addAttribute("liveDeads", LiveDead.values());
     return "timeTable/addTimeTable";
   }

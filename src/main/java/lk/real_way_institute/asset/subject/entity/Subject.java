@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import lk.real_way_institute.asset.batch.entity.Batch;
 import lk.real_way_institute.asset.batch_exam.entity.BatchExam;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.time_table.entity.TimeTable;
 import lk.real_way_institute.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,8 +33,11 @@ public class Subject extends AuditEntity {
   @Enumerated( EnumType.STRING )
   private LiveDead liveDead;
 
-  @ManyToMany(mappedBy = "subject")
+  @OneToMany(mappedBy = "subject")
   private List< BatchExam > batchExams;
+
+  @OneToMany(mappedBy = "subject")
+  private List< TimeTable > timeTables;
 
   @ManyToMany(mappedBy = "subjects")
   private List< Batch > batches;

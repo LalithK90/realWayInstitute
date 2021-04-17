@@ -51,7 +51,6 @@ public class Batch extends AuditEntity {
 
   private BigDecimal courseFee;
 
-
   @ManyToOne
   private  Employee employee;
 

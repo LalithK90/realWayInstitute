@@ -83,39 +83,19 @@
 
     <div class="form-group" >
       <div class="row" >
-        <div class="col-6" data-th-if="${addStatus==true}" >
+        <div data-th-class="${addStatus==false?'col-12':'col-6'}" >
           <!--classDay-->
           <div class="form-group" >
-            <label data-th-for="${'classDay'}" class=" control-label" >Class Day :</label >
-            <div class="" >
-              <select id="classDay" class="form-control" required >
-                <option value="" >Select Day</option >
-                <option value="Mon" >Monday</option >
-                <option value="Sun" >Tuesday</option >
-                <option value="Sun" >Wednesday</option >
-                <option value="Sun" >Thursday</option >
-                <option value="Sun" >Saturday</option >
-                <option value="Sun" >Sunday</option >
-              </select >
-            </div >
+            <label for="startDate" >FROM :</label >
+            <input class="form-control" id="startDate" data-th-field="*{startAt}" type="date" />
           </div >
         </div >
         <div data-th-class="${addStatus==false?'col-12':'col-6'}" >
           <!--classDay-->
           <div class="form-group" >
-            <div class="row" >
-              <div class="col-6" >
-                <div class="form-group" >
-                  <label for="startDate" >FROM :</label >
-                  <input class="form-control" id="startDate" data-th-field="*{startAt}" type="date" />
-                </div >
-              </div >
-              <div class="col-6" >
-                <div class="form-group" >
-                  <label for="endDate" >TO :</label >
-                  <input class="form-control" id="endDate" data-th-field="*{endAt}" type="date" />
-                </div >
-              </div >
+            <div class="form-group" >
+              <label for="endDate" >TO :</label >
+              <input class="form-control" id="endDate" data-th-field="*{endAt}" type="date" />
             </div >
           </div >
         </div >
@@ -205,7 +185,7 @@
                   </div >
                 </td >
                 <td >
-                  <input type="date" class="form-control" data-th-id="${'k'+index.index}"
+                  <input type="date" class="form-control instalmentDateTable" data-th-id="${'k'+index.index}"
                          data-th-field="${batch.instalmentDates[__${index.index}__].date}" onchange="dateValid(this)"
                          required >
                 </td >
@@ -227,7 +207,7 @@
           <div class="form-group" >
             <label data-th-for="${'subjects'}" class="control-label" >Subjects :</label >
             <div >
-              <select id="subjects" class="form-control"  >
+              <select id="subjects" class="form-control" >
                 <option value="" >Select Subject</option >
                 <option data-th-each="subject : ${subjects}"
                         data-th-text="${subject.name}"
@@ -304,16 +284,15 @@
         $("#employee").select2({
             data: $(this).val()
         }).addClass("form-control");
+
         $("#instalmentCount").prop('readonly', true);
     });
 
-    $("#year, #employee ,#enterName, #classDay").change(function () {
+    $("#year,#enterName").change(function () {
         let year = $("#year").val();
-        let employee = $("#employee").val();
         let enterName = $(`#enterName`).val();
-        let classDay = $("#classDay").val();
-        if (year && employee && enterName && classDay) {
-            $("#nameBatch").val(`${year}-${employee}-${enterName}-${classDay}`);
+        if (year && employee && enterName) {
+            $("#nameBatch").val(`${year}-${enterName}`);
         }
     });
 
@@ -322,14 +301,40 @@
             $("#instalmentCount").prop('readonly', false);
         }
     });
+    $("#endDate").change(function () {
+        $(".instalmentDateTable").attr('max', $(this).val());
+    });
+
 
     $("#instalmentCount").keyup(function () {
+            $("#instalmentTable > tbody").empty();
+            if ($("#endDate").val()) {
+                for (let elementKey in document.querySelector(".instalmentDateTable")) {
+                    console.log(elementKey)
+                }
+                $(".instalmentDateTable").each(function () {
+                    let id = $(this).attr('id');
+                    alert(id)
+                    $(`#${id}`).attr('max', $("#endDate").val());
+                });
 
-        $("#instalmentTable > tbody").empty();
+            } else {
+                setTimeout(function () {
+                        swal({
+                            title: "Please select course end date",
+                            icon: "warning",
+                        }).then(() => {
+                            $("#instalmentTable > tbody").empty();
+                            $("#instalmentCount").val('');
+                        });
+                    }
+                    , 1000);
 
-        for (let k = 0; k < $(this).val(); k++) {
-            let startAt = $("#startDate").val();
-            $("#instalmentTable tbody").append(`
+            }
+
+            for (let k = 0; k < $(this).val(); k++) {
+                let startAt = $("#startDate").val();
+                $("#instalmentTable tbody").append(`
             <tr >
               <td >
                 ${k + 1}
@@ -337,16 +342,17 @@
                 <input type="hidden" class="form-control" name="instalmentDates[${k}].liveDead" value="ACTIVE">
               </td >
               <td >
-                <input type="date" min="${startAt}" class="form-control" id="d${k}" name="instalmentDates[${k}].date" required onchange="dateValid(this)">
+                <input type="date" min="${startAt}" class="form-control instalmentDateTable" id="d${k}" name="instalmentDates[${k}].date" required onchange="dateValid(this)">
               </td >
               <td >
                 <input type="number" class="form-control amount" min="0" step="0.01" name="instalmentDates[${k}].amount" required>
               </td >
             </tr >
             `);
-        }
+            }
 
-    });
+        }
+    );
 
     function dateValid(obj) {
         let selectedFiledId = obj.getAttribute('id').slice(1);
@@ -360,6 +366,9 @@
                 swal({
                     title: "Previous filed date and this field date is not accepted",
                     icon: "warning",
+                }).then(() => {
+                    $("#instalmentTable > tbody").empty();
+                    $("#instalmentCount").val('');
                 });
                 $(`#d${selectedFiledId}`).val($(`#d${selectedFiledId - 1}`).val());
             }
@@ -424,7 +433,7 @@
     //table row add
     function tableRowAdd(value) {
         let k = $("#subjectTable tr").length - 1;
-            $("#subjectTable tbody").append(`
+        $("#subjectTable tbody").append(`
                     <tr>
                     <td >
                      <input id="i${value.id}" type="text" hidden
