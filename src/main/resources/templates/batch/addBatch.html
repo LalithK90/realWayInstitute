@@ -309,9 +309,6 @@
     $("#instalmentCount").keyup(function () {
             $("#instalmentTable > tbody").empty();
             if ($("#endDate").val()) {
-                for (let elementKey in document.querySelector(".instalmentDateTable")) {
-                    console.log(elementKey)
-                }
                 $(".instalmentDateTable").each(function () {
                     let id = $(this).attr('id');
                     alert(id)
@@ -394,7 +391,6 @@
         $(".amount").each(function () {
             sum += +$(this).val();
         });
-        console.log(parseFloat(courseFee) === parseFloat(sum))
         if (parseFloat(courseFee) === parseFloat(sum)) {
             $("#submit").show();
         } else {

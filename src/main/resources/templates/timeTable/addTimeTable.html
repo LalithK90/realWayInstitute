@@ -46,50 +46,50 @@
   </div >
   <!--Time Table create-->
   <div class="row mb-2" >
-    <form >
-      <div class="container-fluid" >
-        <div class="row" >
-          <div class="form-group" >
-            <label for="subject" >Subject : </label >
-            <select type="text" name="" id="subject" class="form-control" required >
-              <option value="" >Please Choose</option >
-              <option data-th-each="subject : ${subjects}"
-                      data-th-value="${subject.id}"
-                      data-th-text="${subject.name}" ></option >
-            </select >
-          </div >
-          <div class="form-group" >
-            <label for="lesson" >Lesson : </label >
-            <input type="text" name="" id="lesson" class="form-control" placeholder="" required >
-          </div >
-          <div class="form-group" >
-            <label for="slotStartDate" >Start Date Time At : </label >
-            <div class="form-inline" >
-              <input type="date" name="" id="slotStartDate" class="form-control" placeholder="" required >
-              <input type="time" name="" id="slotStartTime" min="08:00" max="17:00" step="900" class="form-control"
-                     placeholder="" required >
-            </div >
-          </div >
-          <div class="form-group" >
-            <label for="slotEndTime" >End At : </label >
-            <div class="form-inline" >
-              <input type="time" name="" id="slotEndTime" min="08:00" max="17:00" step="900" class="form-control"
-                     placeholder="" required >
-            </div >
-          </div >
-          <div class="form-group" >
-            <label for="slotEnd" class="mt-2" ></label >
-            <br >
-            <button type="submit" id="btnAdd" class="btn btn-info mt-5 ml-2" >Add</button >
+    <div class="container-fluid" >
+      <div class="row" >
+        <div class="form-group" >
+          <label for="subject" >Subject : </label >
+          <select type="text" name="" id="subject" class="form-control" required >
+            <option value="" >Please Choose</option >
+            <option data-th-each="subject : ${subjects}"
+                    data-th-value="${subject.id}"
+                    data-th-text="${subject.name}" ></option >
+          </select >
+        </div >
+        <div class="form-group" >
+          <label for="lesson" >Lesson : </label >
+          <input type="text" name="" id="lesson" class="form-control" placeholder="" required >
+        </div >
+        <div class="form-group" >
+          <label for="slotStartDate" >Start Date Time At : </label >
+          <div class="form-inline" >
+            <input type="date" name="" id="slotStartDate" class="form-control" placeholder="" required >
+            <input type="time" name="" id="slotStartTime" min="08:00" max="17:00" step="900" class="form-control"
+                   placeholder="" required >
           </div >
         </div >
+        <div class="form-group" >
+          <label for="slotEndTime" >End At : </label >
+          <div class="form-inline" >
+            <input type="time" name="" id="slotEndTime" min="08:00" max="17:00" step="900" class="form-control"
+                   placeholder="" required >
+          </div >
+        </div >
+        <div class="form-group" >
+          <label for="btnAdd" class="mt-2" ></label >
+          <br >
+          <button id="btnAdd" class="btn btn-info mt-5 ml-2" >Add</button >
+        </div >
       </div >
-    </form >
+    </div >
   </div >
+</div >
+<div class="row" >
   <form action="/timeTable/save" data-th-object="${batch}" method="post" >
     <p class="text-center h3" > Selected Time Slot</p >
-    <div class="container-fluid" >
-      <table class="table table-hover" id="timeTable" >
+    <div class="w-auto" >
+      <table class="table table-hover w-auto" id="timeTableSlotsList" >
         <tr >
           <th >Index</th >
           <th >Batch Name</th >
@@ -102,7 +102,7 @@
           <th >Modify</th >
         </tr >
         <tr data-th-each="batch, index : ${batchDetail.timeTables}" >
-          <th data-th-if="${!addStatus}" data-th-text="${index.count}" ></th >
+          <th ><span data-th-id="${'id'+index.index }" data-th-text="${index.count}" ></span ></th >
           <th data-th-if="${!addStatus}" >
             <input type="text" class="form-control" data-th-name="${'batches.timeTables[__${index.index}__].code'}"
                    data-th-value="${batches.timeTables[__${index.index}__].code}" required
@@ -165,10 +165,10 @@
     </div >
     <!--Button-->
     <div class="form-batch col-md-12 col-sm-12 text-center flex-column " >
-      <button class="btn btn-success" tabindex="21" type="submit" >
+      <button id="submit" class="btn btn-success" tabindex="21" type="submit" >
         <i class="fa fa-save " style="font-size: 20px" ></i >&nbsp; &nbsp;<span
             data-th-text="${addStatus==true?'Save': 'Update'}"
-            id="submit" ></span >
+      ></span >
       </button >
     </div >
   </form >
@@ -194,6 +194,11 @@
 
 
     });
+
+    $('[type="datetime-local"]').prop('min', function () {
+        return new Date();
+    });
+
     $("#slotStartTime, #slotEndTime").change(function () {
         let slotStartDate = $("#slotStartDate").val();
 
@@ -203,7 +208,7 @@
             let startDateTime = slotStartDate + "T" + startTime;
             let endDateTime = slotStartDate + "T" + endTime;
 
-            if (Date.parse(startDateTime) > Date.parse(endDateTime)) {
+            if (Date.parse(startDateTime) >= Date.parse(endDateTime)) {
                 swal({
                     title: "Could you accept this time period.. !",
                     icon: "warning",
@@ -217,44 +222,209 @@
         }
     })
 
+    function timeSlotLengthCheck() {
+        let slotStartDate = $("#slotStartDate").val();
+
+        let startTime = $("#slotStartTime").val();
+        let endTime = $("#slotEndTime").val();
+        if (startTime && endTime) {
+            let startDateTime = slotStartDate + "T" + startTime;
+            let endDateTime = slotStartDate + "T" + endTime;
+            console.log(Date.parse(endDateTime) - Date.parse(startDateTime))
+            if ((Date.parse(endDateTime) - Date.parse(startDateTime)) < 900000) {
+                swal({
+                    title: "Could you accept this time period.. \n at least 15 min need to for one period!",
+                    icon: "warning",
+                });
+                $("#slotStartTime").addClass("bg-warning");
+                $("#slotEndTime").addClass("bg-warning");
+                return false;
+            } else {
+                $("#slotStartTime").removeClass("bg-warning");
+                $("#slotEndTime").removeClass("bg-warning");
+                return true;
+            }
+        }
+    }
+
     let timeTableSlots = [];
 
-    $("#btnAdd").click(function () {
-        let subjectId = $("#subject").val();
-        let selectedItemId = `#subject option[value='${subjectId}']`;
-        let subjectName = $(selectedItemId).html();
-        let lesson = $("#lesson").val();
-        let slotStartDate = $("#slotStartDate").val();
-        let startTime = slotStartDate + "T" + $("#slotStartTime").val();
-        let endTime = slotStartDate + "T" + $("#slotEndTime").val();
-        let batchName = $("#batchName").val();
-        let batchId = $("#batchId").val();
-        console.log(subjectId + " dd  " + " dds  " + subjectName + " sas " + lesson + " le " + startTime + " sta " + " ed " + endTime)
-        if (subjectId && subjectName && lesson && startTime && endTime && batchName && batchId) {
-            let timeTableSlot = {};
-            timeTableSlot.batch_id = batchId;
-            timeTableSlot.batch_name = batchName;
-            timeTableSlot.subject_id = subjectId;
-            timeTableSlot.subject_name = subjectName;
-            timeTableSlot.lesson = lesson;
-            timeTableSlot.start_at = startTime;
-            timeTableSlot.end_at = endTime;
-            timeTableSlot.activity = 'ACTIVE';
-            timeTableSlots.push(timeTableSlot);
-            tableRowAdd();
-        } else {
-            swal({
-                icon: "warning",
-                text: "Please enter all data before click this button",
-            });
+    function addFromValueRemove() {
+        $("#subject").val('');
+        $("#lesson").val('');
+        $("#slotStartDate").val('');
+        $("#slotEndTime").val('');
+        $("#slotStartTime").val('');
+    }
 
+    $("#btnAdd").click(function () {
+        if (timeSlotLengthCheck()) {
+            let subjectId = $("#subject").val();
+            let selectedItemId = `#subject option[value='${subjectId}']`;
+            let subjectName = $(selectedItemId).html();
+            let lesson = $("#lesson").val();
+            let slotStartDate = $("#slotStartDate").val();
+            let slotStartTime = $("#slotStartTime").val();
+            let startTime = slotStartDate + "T" + slotStartTime;
+            let slotEndTime = $("#slotEndTime").val();
+            let endTime = slotStartDate + "T" + slotEndTime;
+            let batchName = $("#batchName").val();
+            let batchId = $("#batchId").val();
+            if (subjectId && subjectName && lesson && startTime && endTime && batchName && batchId && slotStartTime && slotEndTime) {
+                let timeTableSlot = {};
+                timeTableSlot.batch_id = batchId;
+                timeTableSlot.batch_name = batchName;
+                timeTableSlot.subject_id = subjectId;
+                timeTableSlot.subject_name = subjectName;
+                timeTableSlot.lesson = lesson;
+                timeTableSlot.start_at = startTime;
+                timeTableSlot.end_at = endTime;
+                timeTableSlot.activity = 'ACTIVE';
+                timeTableSlots.push(timeTableSlot);
+                tableRowAdd();
+                addFromValueRemove();
+            } else {
+                swal({
+                    icon: "warning",
+                    text: "Please enter all data before click this button",
+                });
+
+            }
         }
     });
 
     function tableRowAdd() {
-        const sortedTimeTableSlots = timeTableSlots.sort((a, b) => b.start_at - a.start_at)
-        console.log(timeTableSlots);
-        console.log(sortedTimeTableSlots);
+        deleteAllTableRow(timeTableSlotsList)
+
+        const sortedTimeTableSlots = timeTableSlots.sort((a, b) => Date.parse(b.start_at) - Date.parse(a.start_at))
+        let tableRows = '';
+
+        for (let i = 0; i < sortedTimeTableSlots.length; i++) {
+            tableRows += makeTableRow(i, sortedTimeTableSlots[i]);
+        }
+
+        $("#timeTableSlotsList tr:last").after(tableRows);
+
+        allTimeTableSlotValidate();
+
+    }
+
+    $(".form-control").bind("keyup change focusout", function () {
+        console.log("asdasdas")
+        allTimeTableSlotValidate();
+    });
+
+    function allTimeTableSlotValidate() {
+        const sortedTimeTableSlots = timeTableSlots.sort((a, b) => Date.parse(b.start_at) - Date.parse(a.start_at))
+        if (sortedTimeTableSlots.length > 1) {
+            for (let i = 1; i < sortedTimeTableSlots.length; i++) {
+                if (Date.parse(sortedTimeTableSlots[i - 1].end_at) > Date.parse(sortedTimeTableSlots[i].start_at)) {
+                    $(`#timeTableSlotsList tr:eq(${i})`).addClass("bg-warning");
+                    $(`#timeTableSlotsList tr:eq(${i + 1})`).addClass("bg-warning");
+                    $("#submit").hide();
+                    setTimeout(function () {
+                        swal({
+                            icon: "warning",
+                            text: "Please remove color changed fields and correct time period",
+                        })
+                    }, 2000)
+                } else {
+                    $(`#timeTableSlotsList tr:eq(${i})`).removeClass("bg-warning");
+                    $(`#timeTableSlotsList tr:eq(${i + 1})`).removeClass("bg-warning");
+                    $("#submit").show();
+                }
+            }
+        }
+    }
+
+    function makeTableRow(index, value) {
+        let tableRow = `<tr>
+                        <td>
+                            <span id="id${index}">${index + 1}</span>
+                        </td>
+                        <td>
+                        <span id="bn${index}" class="w-auto">${value.batch_name}</span>
+                            <input id="bi${index}" type="text" class="form-control"  name="batch.timeTables[${index}].batch.id" value="${value.batch_id}" hidden required>
+                        </td>
+                        <td>
+                       <span id="sn${index}" class="w-auto"> ${value.subject_name}</span>
+                            <input id="si${index}" type="text" class="form-control" name="batch.timeTables[${index}].subject.id" value="${value.subject_id}" hidden required>
+                        </td>
+                        <td>
+                         <input id="ls${index}" type="text" class="form-control w-auto" name="batch.timeTables[${index}].lesson" value="${value.lesson}" required>
+                        </td>
+                        <td>
+                         <input id="sa${index}" type="datetime-local" class="form-control" name="batch.timeTables[${index}].startAt" value="${value.start_at}" required readonly>
+                        </td>
+                        <td>
+                         <input id="ea${index}" type="datetime-local" class="form-control" name="batch.timeTables[${index}].endAt" value="${value.end_at}" required readonly>
+                        </td>
+                        <td class="w-auto">
+                          <div class="custom-control custom-checkbox custom-control-inline " >
+                            <input class="custom-control-input" required   id="${index}+ACTIVE" name="batch.timeTables[${index}].liveDead" value="ACTIVE" type="radio" checked="checked"/>
+                            <label class="custom-control-label"  for="${index}+ACTIVE" >Active </label >
+                          </div>
+                          <div class="custom-control custom-checkbox custom-control-inline " >
+                            <input class="custom-control-input" required id="${index}+STOP" name="batch.timeTables[${index}].liveDead" value="STOP" type="radio"/>
+                            <label class="custom-control-label" for="${index}+STOP">Deactivate </label >
+                          </div >
+                        </td>
+                        <td>
+                         <input id="cm${index}" type="text" class="form-control class="w-auto"" name="batch.timeTables[${index}].comment" value="" required>
+                        </td>
+                        <td>
+                            <button type="button" id="rm${index}" class="btn btn-outline-danger" onclick="tableRowRemove(this)">Remove</button>
+                        </td>
+                    </tr>`;
+
+        return tableRow;
+    }
+
+    //table row remove
+    function tableRowRemove(obj) {
+        let itemIndex = obj.parentNode.parentNode.rowIndex;
+
+        deleteTimeTable(itemIndex);
+
+        let removeRow = `#timeTableSlotsList tr:eq(${itemIndex})`
+        $(removeRow).remove();
+
+        tableRowAdd();
+    }
+
+    function deleteTimeTable(val) {
+        if (val > 1) {
+            let id = val - 1;
+            let timeTableSlot = {
+                batch_id: $(`#bi${id}`).val(),
+                batch_name: $(`#bn${id}`).html(),
+                subject_id: $(`#si${id}`).val(),
+                subject_name: $(`#sn${id}`).html(),
+                lesson: $(`#ls${id}`).val(),
+                start_at: $(`#ea${id}`).val(),
+                end_at: $(`#sa${id}`).val(),
+                activity: 'ACTIVE'
+            };
+
+            let newTimeTableSlots = [];
+            for (let i = 0; i < timeTableSlots.length; i++) {
+                if (!((timeTableSlots[i].subject_id === timeTableSlot.subject_id) && (timeTableSlots[i].batch_id === timeTableSlot.batch_id))) {
+
+                    let timeTableSlot = {
+                        batch_id: timeTableSlots[i].batch_id,
+                        batch_name: timeTableSlots[i].batch_name,
+                        subject_id: timeTableSlots[i].subject_id,
+                        subject_name: timeTableSlots[i].subject_name,
+                        lesson: timeTableSlots[i].lesson,
+                        start_at: timeTableSlots[i].start_at,
+                        end_at: timeTableSlots[i].end_at,
+                        activity: timeTableSlots[i].activity
+                    };
+                    newTimeTableSlots.push(timeTableSlot);
+                }
+            }
+            timeTableSlots = newTimeTableSlots;
+        }
     }
 
     /* swal({
