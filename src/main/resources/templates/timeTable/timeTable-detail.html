@@ -69,7 +69,7 @@
     </div >
     <div class="col-md-8" >
       <p class="form-control"
-         data-th-text="${timeTableDetail.batch.teacher.firstName +' '+timeTableDetail.batch.teacher.lastName}" ></p >
+         data-th-text="${timeTableDetail.batch.employee.name}" ></p >
     </div >
   </div >
   <!--Lesson-->
@@ -79,15 +79,6 @@
     </div >
     <div class="col-md-8" >
       <p class="form-control" data-th-text="${timeTableDetail.lesson}" ></p >
-    </div >
-  </div >
-  <!--Hall Number-->
-  <div class="form-row " >
-    <div class="col-md-4" >
-      <label class="control-label" >Hall Number :</label >
-    </div >
-    <div class="col-md-8" >
-      <p class="form-control" data-th-text="${timeTableDetail.hall.number}" ></p >
     </div >
   </div >
   <!--student list -->
