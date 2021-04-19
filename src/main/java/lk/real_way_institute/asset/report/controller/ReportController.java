@@ -2,6 +2,7 @@ package lk.real_way_institute.asset.report.controller;
 
 import lk.real_way_institute.asset.batch.entity.Batch;
 import lk.real_way_institute.asset.batch.service.BatchService;
+import lk.real_way_institute.asset.batch_exam.entity.BatchExam;
 import lk.real_way_institute.asset.batch_exam.service.BatchExamService;
 import lk.real_way_institute.asset.common_asset.model.TwoDate;
 import lk.real_way_institute.asset.payment.entity.Payment;
@@ -104,5 +105,23 @@ public class ReportController {
     return commonIncomeReport(model, twoDate.getStartDate(), twoDate.getEndDate());
   }
 
+  @GetMapping( "/batchExam" )
+  public String batchExam(Model model) {
+   List<BatchExam> batchExams = batchExamService.
+    return commonExam(model, LocalDate.now(), LocalDate.now());
+  }
 
+  @PostMapping( "/batchExam" )
+  public String batchExam(@ModelAttribute TwoDate twoDate, Model model) {
+
+    return commonExam(model, );
+  }
+private String commonExam(Model model, List< BatchExam > batchExams, String message){
+
+
+
+    model.addAttribute("message", message);
+  model.addAttribute("BatchExams", batchExamService.findAll());
+  return "report/batchExamReport";
+}
 }
