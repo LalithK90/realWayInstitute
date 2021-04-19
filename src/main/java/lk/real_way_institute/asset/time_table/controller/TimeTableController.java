@@ -214,7 +214,7 @@ public class TimeTableController {
     List< TimeTable > timeTables = new ArrayList<>();
     for ( TimeTable timeTable : batch.getTimeTables() ) {
       if ( dateTimeAgeService.getLocalDateTImeToLocalDate(timeTable.getEndAt()).equals(date) ) {
-        timeTables.add(timeTable);
+        timeTables.add(timeTableService.findById(timeTable.getId()));
       }
     }
     batch.setTimeTables(timeTables);

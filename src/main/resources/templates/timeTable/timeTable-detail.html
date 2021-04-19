@@ -9,31 +9,33 @@
 <!--Nav bar is included-->
 <nav data-th-replace="~{fragments/navBar :: navBarFragment}" ></nav >
 
-<div class="row " >
-  <div class="col-4" >
-    <a href="/timeTable/add" >
-      <button class="btn btn-info" >New Time Slot Add</button >
-    </a >
-  </div >
-  <div class="col-4" >
-    <h1 >Time Table Management</h1 >
-  </div >
-  <div class="col-4" >
-    <a href="/timeTable" >
-      <button class="btn btn-primary" >View All Student</button >
-    </a >
+<div class="container text-center" >
+  <div class="row " >
+    <div class="col-4" >
+      <a href="/timeTable/add" >
+        <button class="btn btn-info" >New Time Slot Add</button >
+      </a >
+    </div >
+    <div class="col-4" >
+      <h4 >Time Table Management</h4 >
+    </div >
+    <div class="col-4" >
+      <a href="/timeTable" >
+        <button class="btn btn-primary" >View All Student</button >
+      </a >
+    </div >
   </div >
 </div >
 <!--Student detail-->
-<div class="container-fluid" data-th-fragment="timeTableDetail" >
+<div class="container" data-th-fragment="timeTableDetail" >
   <!--timeTable id-->
   <div class="form-row" >
-    <div class="col-md-4">
+    <div class="col-md-4" >
       <label data-th-for="${id}" >ID</label >
-    </div>
-    <div class="col-md-8">
+    </div >
+    <div class="col-md-8" >
       <p class="form-control" data-th-text="${timeTableDetail.code}" ></p >
-    </div>
+    </div >
   </div >
   <!-- start date time-->
   <div class="form-row " >
@@ -83,10 +85,10 @@
   </div >
 </div >
 
-<div class="container-fluid">
+<div class="container-fluid" >
   <!--student list -->
-  <div data-th-replace="~{student/student :: studentsFragment}" ></div>
-</div>
+  <div data-th-replace="~{student/student :: studentsFragment}" ></div >
+</div >
 <!--Button-->
 <div class="form-batch col-md-12 col-sm-12 text-center flex-column " >
   <a href="/timeTable" >

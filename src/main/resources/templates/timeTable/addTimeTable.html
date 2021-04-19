@@ -64,7 +64,8 @@
         <div class="form-group" >
           <label for="slotStartDate" >Start Date Time At : </label >
           <div class="form-inline" >
-            <input type="date" name="" id="slotStartDate" class="form-control" data-th-value="${date}" placeholder="" required readonly>
+            <input type="date" name="" id="slotStartDate" class="form-control" data-th-value="${date}" placeholder=""
+                   required readonly >
             <input type="time" name="" id="slotStartTime" min="08:00" max="17:00" step="900" class="form-control"
                    placeholder="" required >
           </div >
@@ -87,7 +88,8 @@
 </div >
 <div class="row" >
   <form action="/timeTable/save" data-th-object="${batch}" method="post" >
-    <p class="text-center h3" > Selected Time Slot</p >
+    <p class="text-center h3" > Selected Time Slot</p > <span
+        data-th-text="${#lists.size(batchDetail.timeTables)}" ></span >
     <div class="w-auto" >
       <table class="table table-hover w-auto" id="timeTableSlotsList" >
         <tr >
@@ -101,42 +103,47 @@
           <th >Comment</th >
           <th >Modify</th >
         </tr >
+
         <tr data-th-each="timeTable, index : ${batchDetail.timeTables}" >
-          <th ><span data-th-id="${'id'+index.index }" data-th-text="${index.count}" ></span ></th >
-          <th data-th-if="${!addStatus}" >
-            <input type="text" class="form-control" data-th-name="${'batches.timeTables[__${index.index}__].code'}"
-                   data-th-value="${batches.timeTables[__${index.index}__].code}" required
-                   readonly >
-            <input type="text" class="form-control" data-th-name="${'batches.timeTables[__${index.index}__].id'}"
-                   data-th-value="${batches.timeTables[__${index.index}__].id}" required
-                   readonly >
+          <th >
+            <span data-th-id="${'id'+index.index }" data-th-text="${index.count}" ></span >
+            <input data-th-id="${'tc'+index.index }" type="text" class="form-control"
+                   data-th-name="${'batches.timeTables[__${index.index}__].code'}"
+                   data-th-value="${timeTable.code}" required readonly hidden >
+            <input data-th-id="${'ti'+index.index }" type="text" class="form-control"
+                   data-th-name="${'batches.timeTables[__${index.index}__].id'}"
+                   data-th-value="${timeTable.id}" required hidden readonly >
           </th >
           <th >
-            <input type="text" class="form-control"
+            <input data-th-id="${'bn'+index.index }" type="text" class="form-control"
                    data-th-value="${timeTable.batch.name}" required readonly >
-            <input type="hidden" class="form-control" data-th-name="${'timeTables[__${index.index}__].batch.id'}"
-                   data-th-value="${timeTable.batch.id}" required readonly >
+            <input data-th-id="${'bi'+index.index }" type="text" class="form-control"
+                   data-th-name="${'timeTables[__${index.index}__].batch.id'}"
+                   data-th-value="${timeTable.batch.id}" required readonly hidden >
           </th >
           <th >
-            <input type="text" class="form-control"
-                   data-th-value="${timeTable.batch.count}" required
-                   readonly >
+            <input data-th-id="${'sn'+index.index }" type="text" class="form-control"
+                   data-th-value="${timeTable.subject.name}" required readonly >
+            <input data-th-id="${'si'+index.index }" type="text" class="form-control"
+                   data-th-name="${'timeTables[__${index.index}__].batch.id'}"
+                   data-th-value="${timeTable.subject.id}" required readonly hidden >
           </th >
           <th >
-            <input type="text" class="form-control" data-th-name="${'timeTables[__${index.index}__].lesson'}"
+            <input data-th-id="${'ls'+index.index }" type="text" class="form-control"
+                   data-th-name="${'timeTables[__${index.index}__].lesson'}"
                    data-th-value="${timeTable.lesson}" required >
           </th >
           <th >
             <input type="datetime-local" class="form-control startAt"
-                   data-th-id="${'sAt'+index.index}"
+                   data-th-id="${'sa'+index.index }"
                    data-th-name="${'timeTables[__${index.index}__].startAt'}"
-                   data-th-value="${timeTable.startAt}" required >
+                   data-th-value="${timeTable.startAt}" required readonly >
           </th >
           <th >
             <input type="datetime-local" class="form-control endAt"
-                   data-th-id="${'eAt'+index.index}"
+                   data-th-id="${'ea'+index.index }"
                    data-th-name="${'timeTables[__${index.index}__].endAt'}"
-                   data-th-value="${timeTable.endAt}" required >
+                   data-th-value="${timeTable.endAt}" required readonly >
           </th >
 
           <th data-th-if="${!addStatus}" >
@@ -156,9 +163,14 @@
             </div >
           </th >
           <th data-th-if="${!addStatus}" >
-            <input type="text" class="form-control"
+            <input type="text" class="form-control" data-th-id="${'rm'+index.index }"
                    data-th-name="${'timeTables[__${index.index}__].remark'}"
                    data-th-value="${timeTable.remark}" required >
+          </th >
+          <th >
+            <button type="button" id="rm${index}" class="btn btn-outline-danger" onclick="tableRowRemove(this)" >
+              Remove
+            </button >
           </th >
         </tr >
       </table >
@@ -195,9 +207,26 @@
         let endDate = $("#batchEndAtAt").val();
         $("#slotStartDate").attr('min', startDate).attr('max', endDate);
 
-        if ($("#timeTableSlotsList").val()) {
-            console.log("asdasd")
+        let tableLength = $("#timeTableSlotsList tr").length;
+        if (tableLength > 1) {
+            for (let i = 1; i < tableLength; i++) {
+                let timeTableSlot = {
+                    timeTable_id: $(`#ti${i - 1}`).val(),
+                    timeTable_code: $(`#tc${i - 1}`).val(),
+                    batch_id: $(`#bi${i - 1}`).val(),
+                    batch_name: $(`#bn${i - 1}`).val(),
+                    subject_id: $(`#si${i - 1}`).val(),
+                    subject_name: $(`#sn${i - 1}`).val(),
+                    lesson: $(`#ls${i - 1}`).val(),
+                    start_at: $(`#ea${i - 1}`).val(),
+                    end_at: $(`#sa${i - 1}`).val(),
+                    activity: $(`input[name="timeTables[${i - 1}].liveDead"]`).val(),
+                    remark: $(`#rm${i - 1}`).val()
+                };
+                timeTableSlots.push(timeTableSlot);
+            }
         }
+
 
     });
 
@@ -257,7 +286,6 @@
     function addFromValueRemove() {
         $("#subject").val('');
         $("#lesson").val('');
-        $("#slotStartDate").val('');
         $("#slotEndTime").val('');
         $("#slotStartTime").val('');
     }
@@ -277,6 +305,8 @@
             let batchId = $("#batchId").val();
             if (subjectId && subjectName && lesson && startTime && endTime && batchName && batchId && slotStartTime && slotEndTime) {
                 let timeTableSlot = {};
+                timeTableSlot.timeTable_id = '';
+                timeTableSlot.timeTable_code = '';
                 timeTableSlot.batch_id = batchId;
                 timeTableSlot.batch_name = batchName;
                 timeTableSlot.subject_id = subjectId;
@@ -285,6 +315,7 @@
                 timeTableSlot.start_at = startTime;
                 timeTableSlot.end_at = endTime;
                 timeTableSlot.activity = 'ACTIVE';
+                timeTableSlot.remark = '';
                 timeTableSlots.push(timeTableSlot);
                 tableRowAdd();
                 addFromValueRemove();
@@ -329,10 +360,8 @@
                 let batterylow = sda && ada;
                 console.log('exce ' + batterylow)
 
-                let thee= Date.parse(sortedTimeTableSlots[i - 1].start_at) < Date.parse(sortedTimeTableSlots[i].end_at)> Date.parse(sortedTimeTableSlots[i].start_at);
-                console.log(" rterter "+thee)
 
-                if ((Date.parse(sortedTimeTableSlots[i - 1].end_at) < Date.parse(sortedTimeTableSlots[i].start_at)) && (Date.parse(sortedTimeTableSlots[i - 1].start_at) > Date.parse(sortedTimeTableSlots[i].start_at))) {
+                if (batterylow) {
                     $(`#timeTableSlotsList tr:eq(${i})`).addClass("bg-warning");
                     $(`#timeTableSlotsList tr:eq(${i + 1})`).addClass("bg-warning");
                     $("#submit").hide();
@@ -384,7 +413,7 @@
                           </div >
                         </td>
                         <td>
-                         <input id="cm${index}" type="text" class="form-control class="w-auto"" name="timeTables[${index}].comment" value="" >
+                         <input id="rm${index}" type="text" class="form-control class="w-auto"" name="timeTables[${index}].remark" value="" >
                         </td>
                         <td>
                             <button type="button" id="rm${index}" class="btn btn-outline-danger" onclick="tableRowRemove(this)">Remove</button>
@@ -396,7 +425,6 @@
 
     //table row remove
     function tableRowRemove(obj) {
-        console.log("sadasdas")
         let itemIndex = obj.parentNode.parentNode.rowIndex;
         if (itemIndex > 1) {
             deleteTimeTable(itemIndex);
@@ -411,6 +439,8 @@
     function deleteTimeTable(val) {
         let id = val - 1;
         let timeTableSlot = {
+            timeTable_id: '',
+            timeTable_code: '',
             batch_id: $(`#bi${id}`).val(),
             batch_name: $(`#bn${id}`).html(),
             subject_id: $(`#si${id}`).val(),
@@ -418,7 +448,8 @@
             lesson: $(`#ls${id}`).val(),
             start_at: $(`#ea${id}`).val(),
             end_at: $(`#sa${id}`).val(),
-            activity: 'ACTIVE'
+            activity: 'ACTIVE',
+            remark: $(`#rm${id}`).val()
         };
 
         let newTimeTableSlots = [];
@@ -426,6 +457,8 @@
             if (!((timeTableSlots[i].subject_id === timeTableSlot.subject_id) && (timeTableSlots[i].batch_id === timeTableSlot.batch_id))) {
 
                 let timeTableSlot = {
+                    timeTable_id: '',
+                    timeTable_code: '',
                     batch_id: timeTableSlots[i].batch_id,
                     batch_name: timeTableSlots[i].batch_name,
                     subject_id: timeTableSlots[i].subject_id,
@@ -433,12 +466,14 @@
                     lesson: timeTableSlots[i].lesson,
                     start_at: timeTableSlots[i].start_at,
                     end_at: timeTableSlots[i].end_at,
-                    activity: timeTableSlots[i].activity
+                    activity: timeTableSlots[i].activity,
+                    remark: timeTableSlots[i].remark
                 };
                 newTimeTableSlots.push(timeTableSlot);
             }
         }
         timeTableSlots = newTimeTableSlots;
+        allTimeTableSlotValidate()
     }
 
 </script >
