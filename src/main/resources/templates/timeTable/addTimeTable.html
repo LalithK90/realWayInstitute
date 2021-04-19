@@ -168,7 +168,8 @@
                    data-th-value="${timeTable.remark}" required >
           </th >
           <th >
-            <button type="button" id="rm${index}" class="btn btn-outline-danger" onclick="tableRowRemove(this)" >
+            <button type="button" data-th-id="${'rb'+index.index}" class="btn btn-outline-danger"
+                    onclick="tableRowRemove(this)" >
               Remove
             </button >
           </th >
@@ -384,6 +385,8 @@
         let tableRow = `<tr>
                         <td>
                             <span id="id${index}">${index + 1}</span>
+                              <input id="ti${index}" type="text" class="form-control"  name="timeTables[${index}].id" value="${value.timeTable_id}" hidden >
+                                <input id="tc${index}" type="text" class="form-control"  name="timeTables[${index}].code" value="${value.timeTable_code}" hidden >
                         </td>
                         <td>
                         <span id="bn${index}" class="w-auto">${value.batch_name}</span>
@@ -416,7 +419,7 @@
                          <input id="rm${index}" type="text" class="form-control class="w-auto"" name="timeTables[${index}].remark" value="" >
                         </td>
                         <td>
-                            <button type="button" id="rm${index}" class="btn btn-outline-danger" onclick="tableRowRemove(this)">Remove</button>
+                            <button type="button" id="rb${index}" class="btn btn-outline-danger" onclick="tableRowRemove(this)">Remove</button>
                         </td>
                     </tr>`;
 
@@ -454,8 +457,10 @@
 
         let newTimeTableSlots = [];
         for (let i = 0; i < timeTableSlots.length; i++) {
-            if (!((timeTableSlots[i].subject_id === timeTableSlot.subject_id) && (timeTableSlots[i].batch_id === timeTableSlot.batch_id))) {
-
+            if (!((timeTableSlots[i].subject_id === timeTableSlot.subject_id) && (timeTableSlots[i].batch_id === timeTableSlot.batch_id)
+                && Date.parse(timeTableSlots[i].start_at) === Date.parse(timeTableSlot.start_at) && Date.parse(timeTableSlots[i].end_at) === Date.parse(timeTableSlot.end_at))) {
+                console.log(" hhhheheheh")
+                //todo
                 let timeTableSlot = {
                     timeTable_id: '',
                     timeTable_code: '',

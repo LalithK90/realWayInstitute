@@ -4,6 +4,7 @@ package lk.real_way_institute.asset.payment.service;
 
 import lk.real_way_institute.asset.batch_student.entity.BatchStudent;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.instalment_date.entity.InstalmentDate;
 import lk.real_way_institute.asset.payment.dao.PaymentDao;
 import lk.real_way_institute.asset.payment.entity.Payment;
 import lk.real_way_institute.util.interfaces.AbstractService;
@@ -52,15 +53,13 @@ public class PaymentService implements AbstractService< Payment, Integer > {
     return paymentDao.findFirstByOrderByIdDesc();
   }
 
-  public Payment findByMonthAndBatchStudent(Month month, BatchStudent batchStudent, Year year) {
-    return paymentDao.findByBatchStudentAndMonthAndYear(batchStudent, month,year);
-  }
 
-/*  public Payment findByMonthAndBatchStudentAndPaymentStatus(Month month, BatchStudent batchStudent, PaymentStatus noPaid) {
-    return paymentDao.findByMonthAndBatchStudentAndPaymentStatus(batchStudent, month,noPaid);
-  }*/
 
   public List< Payment > findByCreatedAtIsBetween(LocalDateTime startAt, LocalDateTime endAt) {
     return paymentDao.findByCreatedAtIsBetween(startAt, endAt);
+  }
+
+  public Payment findByInstalmentDateAndBatchStudent(InstalmentDate instalmentDate, BatchStudent batchStudent) {
+  return paymentDao.findByInstalmentDateAndBatchStudent(instalmentDate, batchStudent);
   }
 }

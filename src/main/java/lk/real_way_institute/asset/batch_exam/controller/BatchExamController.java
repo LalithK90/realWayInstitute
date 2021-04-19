@@ -13,6 +13,7 @@ import lk.real_way_institute.asset.user_management.entity.User;
 import lk.real_way_institute.asset.user_management.service.UserService;
 import lk.real_way_institute.util.service.EmailService;
 import lk.real_way_institute.util.service.MakeAutoGenerateNumberService;
+import org.springframework.mail.MailException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -129,7 +130,11 @@ public class BatchExamController {
             "Dear " + student.getName() + "\n Your batch " + batchService.findById(batchExamDb.getBatch().getId()).getName() + " subject " + batchExamDb.getSubject().getName() + "'s exam " +
                 "would be held from " + batchExamDb.getStartAt() + " to " + batchExamDb.getEndAt() + ".\n Thanks \n " +
                 "Success Student";
-        emailService.sendEmail(student.getEmail(), "Exam - Notification", message);
+        try {
+          emailService.sendEmail(student.getEmail(), "Exam - Notification", message);
+        } catch ( MailException e ) {
+          e.printStackTrace();
+        }
       }
     });
     return "redirect:/batchExam/teacher";

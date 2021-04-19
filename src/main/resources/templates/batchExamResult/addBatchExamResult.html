@@ -96,12 +96,12 @@
             <td data-th-if="${addStatus}" >
               <input class="form-control mark" type="number" data-th-id="${'mr'+index.index}" min="0" max="100"
                      data-th-field="*{batchStudentExamResults[__${index.index}__].mark}"
-                     data-th-readonly="${batchStudentExamResult.attendanceStatus.attendanceStatus=='Absent'}" >
+                     data-th-readonly="${batchStudentExamResult.attendanceStatus.attendanceStatus=='Absent'}" required>
             </td >
             <td data-th-if="${addStatus}" >
               <select data-th-id="${'rg'+index.index}"
                       data-th-field="*{batchStudentExamResults[__${index.index}__].resultGrade}" readonly
-                      class="form-control" >
+                      class="form-control" required>
                 <option value="" >Please select</option >
                 <option data-th-each="resultGrade : ${resultGrades}"
                         data-th-text="${resultGrade.resultGrade}"
