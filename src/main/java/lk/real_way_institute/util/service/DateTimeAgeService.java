@@ -81,4 +81,7 @@ public class DateTimeAgeService {
     }
 
 
+  public LocalDate getLocalDateTImeToLocalDate(LocalDateTime localDateTime) {
+  return LocalDate.of(localDateTime.getYear(), localDateTime.getMonthValue(), localDateTime.getDayOfMonth());
+    }
 }

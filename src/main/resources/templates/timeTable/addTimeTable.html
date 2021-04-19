@@ -64,7 +64,7 @@
         <div class="form-group" >
           <label for="slotStartDate" >Start Date Time At : </label >
           <div class="form-inline" >
-            <input type="date" name="" id="slotStartDate" class="form-control" placeholder="" required >
+            <input type="date" name="" id="slotStartDate" class="form-control" data-th-value="${date}" placeholder="" required readonly>
             <input type="time" name="" id="slotStartTime" min="08:00" max="17:00" step="900" class="form-control"
                    placeholder="" required >
           </div >
@@ -101,7 +101,7 @@
           <th >Comment</th >
           <th >Modify</th >
         </tr >
-        <tr data-th-each="batch, index : ${batchDetail.timeTables}" >
+        <tr data-th-each="timeTable, index : ${batchDetail.timeTables}" >
           <th ><span data-th-id="${'id'+index.index }" data-th-text="${index.count}" ></span ></th >
           <th data-th-if="${!addStatus}" >
             <input type="text" class="form-control" data-th-name="${'batches.timeTables[__${index.index}__].code'}"
@@ -113,30 +113,30 @@
           </th >
           <th >
             <input type="text" class="form-control"
-                   data-th-value="${batches.timeTables[__${index.index}__].batch.name}" required readonly >
+                   data-th-value="${timeTable.batch.name}" required readonly >
             <input type="hidden" class="form-control" data-th-name="${'timeTables[__${index.index}__].batch.id'}"
-                   data-th-value="${batches.timeTables[__${index.index}__].batch.id}" required readonly >
+                   data-th-value="${timeTable.batch.id}" required readonly >
           </th >
           <th >
             <input type="text" class="form-control"
-                   data-th-value="${batches.timeTables[__${index.index}__].batch.count}" required
+                   data-th-value="${timeTable.batch.count}" required
                    readonly >
           </th >
           <th >
             <input type="text" class="form-control" data-th-name="${'timeTables[__${index.index}__].lesson'}"
-                   data-th-value="${batches.timeTables[__${index.index}__].lesson}" required >
+                   data-th-value="${timeTable.lesson}" required >
           </th >
           <th >
             <input type="datetime-local" class="form-control startAt"
                    data-th-id="${'sAt'+index.index}"
                    data-th-name="${'timeTables[__${index.index}__].startAt'}"
-                   data-th-value="${batches.timeTables[__${index.index}__].startAt}" required >
+                   data-th-value="${timeTable.startAt}" required >
           </th >
           <th >
             <input type="datetime-local" class="form-control endAt"
                    data-th-id="${'eAt'+index.index}"
                    data-th-name="${'timeTables[__${index.index}__].endAt'}"
-                   data-th-value="${batches.timeTables[__${index.index}__].endAt}" required >
+                   data-th-value="${timeTable.endAt}" required >
           </th >
 
           <th data-th-if="${!addStatus}" >
@@ -147,7 +147,7 @@
                        data-th-name="${'timeTables[__${index.index}__].liveDead'}"
                        data-th-value="${liveDead}"
                        data-th-id="${index.index}+${liveDead}" type="radio"
-                       data-th-checked="${liveDead==batches.timeTables[__${index.index}__].liveDead}" />
+                       data-th-checked="${liveDead==timeTable.liveDead}" />
                 <label class="custom-control-label"
                        data-th-for="${index.index}+${liveDead}"
                        data-th-text="${liveDead.liveDead}" > radio
@@ -158,7 +158,7 @@
           <th data-th-if="${!addStatus}" >
             <input type="text" class="form-control"
                    data-th-name="${'timeTables[__${index.index}__].remark'}"
-                   data-th-value="${batches.timeTables[__${index.index}__].remark}" required >
+                   data-th-value="${timeTable.remark}" required >
           </th >
         </tr >
       </table >

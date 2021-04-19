@@ -6,11 +6,13 @@ import lk.real_way_institute.asset.batch.entity.enums.ClassDay;
 import lk.real_way_institute.asset.batch.service.BatchService;
 import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
 import lk.real_way_institute.asset.common_asset.model.DateTimeTable;
+import lk.real_way_institute.asset.common_asset.model.TwoDate;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
 import lk.real_way_institute.asset.student.entity.Student;
 import lk.real_way_institute.asset.student.service.StudentService;
 import lk.real_way_institute.asset.subject.service.SubjectService;
 import lk.real_way_institute.asset.time_table.entity.*;
+import lk.real_way_institute.asset.time_table.model.TimeTableDate;
 import lk.real_way_institute.asset.time_table.service.TimeTableService;
 import lk.real_way_institute.asset.user_management.entity.User;
 import lk.real_way_institute.asset.user_management.service.*;
@@ -29,6 +31,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -67,9 +70,49 @@ public class TimeTableController {
 
   @GetMapping
   public String findAll(Model model) {
-    model.addAttribute("timeTables",
-                       timeTableService.findAll());
+    LocalDate today = LocalDate.now();
+    return findAllCommon(model, today, today.plusDays(7), 0);
+
+  }
+
+  private String findAllCommon(Model model, LocalDate startDate, LocalDate endDate, int id) {
+    List< TimeTableDate > timeTableDates = new ArrayList<>();
+    List< TimeTable > timeTables = timeTableService.findAll();
+    Period difference = Period.between(startDate, endDate);
+    for ( int i = 0; i < difference.getDays() + 1; i++ ) {
+      TimeTableDate timeTableDate = new TimeTableDate();
+      List< TimeTable > timeTableFilterOnDate = new ArrayList<>();
+      timeTableDate.setDate(startDate.plusDays(i));
+      for ( TimeTable timeTable : timeTables ) {
+        if ( id == 0 ) {
+          if ( dateTimeAgeService.getLocalDateTImeToLocalDate(timeTable.getEndAt()).equals(startDate.plusDays(i)) ) {
+            timeTableFilterOnDate.add(timeTable);
+          }
+        } else {
+          Batch batch = batchService.findById(id);
+          if ( dateTimeAgeService.getLocalDateTImeToLocalDate(timeTable.getEndAt()).equals(startDate.plusDays(i)) && timeTable.getBatch().equals(batch) ) {
+            timeTableFilterOnDate.add(timeTable);
+          }
+        }
+      }
+
+
+      timeTableDate.setTimeTables(timeTableFilterOnDate);
+      timeTableDate.setStatus(!timeTableFilterOnDate.isEmpty());
+      timeTableDates.add(timeTableDate);
+    }
+
+    String message = "Show all date time tables from " + startDate + " to " + startDate.plusDays(7);
+    model.addAttribute("timeTableDates", timeTableDates);
+    model.addAttribute("message", message);
+    model.addAttribute("batches", batchService.findAll());
     return "timeTable/timeTable";
+  }
+
+  @PostMapping
+  public String findAll(@ModelAttribute( "twoDate" ) TwoDate twoDate, Model model) {
+
+    return findAllCommon(model, twoDate.getStartDate(), twoDate.getEndDate(), twoDate.getId());
   }
 
   @GetMapping( "/byDate" )
@@ -113,8 +156,10 @@ public class TimeTableController {
 
 
   @PostMapping( "/add" )
-  public String form(                     @RequestParam( "id" ) Integer id, Model model) {
-    return commonThing(model,  id, true);
+  public String form(@RequestParam( "date" ) @DateTimeFormat( pattern = "yyyy-MM-dd" ) LocalDate date,
+                     @RequestParam( "id" ) Integer id, Model model) {
+    Batch batch = addEditPostMethod(date, id, model);
+    return commonThing(model, id, true, batch);
   }
 
   @GetMapping( "/view/{id}" )
@@ -132,23 +177,55 @@ public class TimeTableController {
     return "timeTable/timeTable-detail";
   }
 
-  @GetMapping( "/edit/{id}" )
-  public String editGet(                        @RequestParam( "id" ) Integer id,  Model model) {
-    return commonThing(model, id, false);
+  @PostMapping( "/view" )
+  public String viewPost(@RequestParam( "date" ) @DateTimeFormat( pattern = "yyyy-MM-dd" ) LocalDate date,
+                         @RequestParam( "id" ) Integer id,
+                         Model model) {
+    Batch batch = batchService.findById(id);
+
+    List< TimeTable > timeTables = new ArrayList<>();
+    batch.getTimeTables().forEach(x -> timeTables.add(timeTableService.findById(x.getId())));
+    model.addAttribute("timeTables", timeTables);
+
+    List< Student > students = new ArrayList<>();
+
+    batch.getBatchStudents().forEach(x -> students.add(studentService.findById(x.getStudent().getId())));
+
+    model.addAttribute("students", students);
+    model.addAttribute("batchDetail", batch);
+    model.addAttribute("studentRemoveBatch", true);
+    return "timeTable/allTimeDetailDate";
   }
 
   @PostMapping( "/edit" )
-  public String editPost(
+  public String editPost(@RequestParam( "date" ) @DateTimeFormat( pattern = "yyyy-MM-dd" ) LocalDate date,
                          @RequestParam( "id" ) Integer id,
                          Model model) {
-    return commonThing(model,  id,false);
+
+    Batch batch = addEditPostMethod(date, id, model);
+    return commonThing(model, id, false, batch);
+  }
+
+  private Batch addEditPostMethod(@DateTimeFormat( pattern = "yyyy-MM-dd" ) @RequestParam( "date" ) LocalDate date,
+                                  @RequestParam( "id" ) Integer id, Model model) {
+    model.addAttribute("date", date);
+    Batch batch = batchService.findById(id);
+
+    List< TimeTable > timeTables = new ArrayList<>();
+    for ( TimeTable timeTable : batch.getTimeTables() ) {
+      if ( dateTimeAgeService.getLocalDateTImeToLocalDate(timeTable.getEndAt()).equals(date) ) {
+        timeTables.add(timeTable);
+      }
+    }
+    batch.setTimeTables(timeTables);
+    return batch;
   }
 
   @PostMapping( "/save" )
   public String persist(@Valid @ModelAttribute Batch batch, BindingResult bindingResult, Model model) {
     if ( bindingResult.hasErrors() ) {
-      System.out.println(bindingResult.toString());
-      return commonThing(model, batch.getId(),true );
+
+      return commonThing(model, batch.getId(), true, batch);
     }
 
     for ( TimeTable timeTable : batch.getTimeTables() ) {
@@ -161,15 +238,17 @@ public class TimeTableController {
         }
       }
       TimeTable timeTableDb = timeTableService.persist(timeTable);
-      timeTableDb.getBatch().getBatchStudents().forEach(x -> {
-        Student student = studentService.findById(x.getId());
-        if ( student.getEmail() != null ) {
-          String message = "Dear " + student.getName() + "\n Your " + timeTableDb.getBatch().getName() + " class " +
-              "would be held from " + timeTableDb.getStartAt() + " to " + timeTableDb.getEndAt() + "\n Thanks \n " +
-              "Success Student";
-          emailService.sendEmail(student.getEmail(), "Time Table - Notification", message);
-        }
-      });
+      if ( timeTableDb.getBatch().getBatchStudents() != null ) {
+        timeTableDb.getBatch().getBatchStudents().forEach(x -> {
+          Student student = studentService.findById(x.getId());
+          if ( student.getEmail() != null ) {
+            String message = "Dear " + student.getName() + "\n Your " + timeTableDb.getBatch().getName() + " class " +
+                "would be held from " + timeTableDb.getStartAt() + " to " + timeTableDb.getEndAt() + "\n Thanks \n " +
+                "Success Student";
+            emailService.sendEmail(student.getEmail(), "Time Table - Notification", message);
+          }
+        });
+      }
 
     }
 
@@ -177,12 +256,11 @@ public class TimeTableController {
 
   }
 
-  private String commonThing(Model model, Integer id, boolean addStatus) {
-
-    Batch batch = batchService.findById(id);
+  private String commonThing(Model model, Integer id, boolean addStatus, Batch batch) {
 
     if ( batch.getEndAt().equals(LocalDate.now()) ) {
-      model.addAttribute("message", " There is no requirement to create new time table, because to day is finished this course");
+      model.addAttribute("message", " There is no requirement to create new time table, because to day is finished " +
+          "this course");
       model.addAttribute("batches", batchService.findAll());
       return "timeTable/dateChooser";
     }
