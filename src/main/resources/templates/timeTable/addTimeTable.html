@@ -266,7 +266,7 @@
         if (startTime && endTime) {
             let startDateTime = slotStartDate + "T" + startTime;
             let endDateTime = slotStartDate + "T" + endTime;
-            console.log(Date.parse(endDateTime) - Date.parse(startDateTime))
+
             if ((Date.parse(endDateTime) - Date.parse(startDateTime)) < 900000) {
                 swal({
                     title: "Could you accept this time period.. \n at least 15 min need to for one period!",
@@ -341,44 +341,60 @@
         }
 
         $("#timeTableSlotsList tr:last").after(tableRows);
-
+        console.log("class after add")
         allTimeTableSlotValidate();
-
     }
 
 
     function allTimeTableSlotValidate() {
-        const sortedTimeTableSlots = timeTableSlots.sort((a, b) => Date.parse(b.start_at) - Date.parse(a.end_at))
-        if (sortedTimeTableSlots.length > 1) {
-            for (let i = 1; i < sortedTimeTableSlots.length; i++) {
-                console.log("en  " + sortedTimeTableSlots[i].end_at + "  st " + sortedTimeTableSlots[i - 1].start_at)
 
-//todo : stuck here
-                let sda = Date.parse(sortedTimeTableSlots[i - 1].start_at) < Date.parse(sortedTimeTableSlots[i].end_at);
-                console.log(sda + ' sssssss')
-                let ada = Date.parse(sortedTimeTableSlots[i - 1].end_at) > Date.parse(sortedTimeTableSlots[i].start_at);
-                console.log(ada + ' fffff')
-                let batterylow = sda && ada;
-                console.log('exce ' + batterylow)
+        let tableLength = $("#timeTableSlotsList tr").length;
+        if (tableLength > 2) {
+            for (let i = 0; i < tableLength - 2; i++) {
 
+                let previousEndAt = Date.parse($(`#ea${i}`).val());
+                let presentStartAt = Date.parse($(`#sa${i + 1}`).val());
 
-                if (batterylow) {
-                    $(`#timeTableSlotsList tr:eq(${i})`).addClass("bg-warning");
+                let previousStartAt = Date.parse($(`#sa${i}`).val());
+                let presentEndAt = Date.parse($(`#ea${i + 1}`).val());
+
+                let previousEndPresentStart = previousEndAt - presentStartAt;
+                let previousStartPresentEnd = previousStartAt - presentEndAt;
+
+                let logicValue = (Math.sign(previousEndPresentStart) === 1 && Math.sign(previousStartPresentEnd) === 1) || (Math.sign(previousEndPresentStart) === 1 && Math.sign(previousStartPresentEnd) === 0);
+
+                if (!logicValue) {
                     $(`#timeTableSlotsList tr:eq(${i + 1})`).addClass("bg-warning");
-                    $("#submit").hide();
-                    setTimeout(function () {
-                        swal({
-                            icon: "warning",
-                            text: "Please remove color changed fields and correct time period",
-                        })
-                    }, 2000)
+                    $(`#timeTableSlotsList tr:eq(${i + 2})`).addClass("bg-warning");
+                    swal({
+                        icon: "warning",
+                        text: "Please remove color changed fields and correct time period",
+                    })
                 } else {
-                    $(`#timeTableSlotsList tr:eq(${i})`).removeClass("bg-warning");
                     $(`#timeTableSlotsList tr:eq(${i + 1})`).removeClass("bg-warning");
-                    $("#submit").show();
+                    $(`#timeTableSlotsList tr:eq(${i + 2})`).removeClass("bg-warning");
                 }
             }
         }
+
+        let rowClassArray = [];
+        for (let i = 0; i < tableLength; i++) {
+            let rowClass = $(`#timeTableSlotsList tr:eq(${i})`).attr('class');
+            if (rowClass === 'bg-warning') {
+                console.log("asdasdas")
+                rowClassArray.push(rowClass);
+            }
+        }
+
+        if (rowClassArray.includes('bg-warning')) {
+            console.log("include")
+            $("#submit, #btnAdd").hide();
+        } else {
+            console.log(" not inclued")
+            $("#submit, #btnAdd").show();
+
+        }
+
     }
 
     function makeTableRow(index, value) {
@@ -429,12 +445,16 @@
     //table row remove
     function tableRowRemove(obj) {
         let itemIndex = obj.parentNode.parentNode.rowIndex;
-        if (itemIndex > 1) {
-            deleteTimeTable(itemIndex);
-        }
+        console.log(" item index " + itemIndex)
+
+        deleteTimeTable(itemIndex);
+
         let removeRow = `#timeTableSlotsList tr:eq(${itemIndex})`
         $(removeRow).remove();
-        if (itemIndex > 1) {
+
+        let tableLength = $("#timeTableSlotsList tr").length;
+        if (tableLength > 1) {
+            console.log("add tavle")
             tableRowAdd();
         }
     }
@@ -449,18 +469,22 @@
             subject_id: $(`#si${id}`).val(),
             subject_name: $(`#sn${id}`).html(),
             lesson: $(`#ls${id}`).val(),
-            start_at: $(`#ea${id}`).val(),
-            end_at: $(`#sa${id}`).val(),
+            start_at: $(`#sa${id}`).val(),
+            end_at: $(`#ea${id}`).val(),
             activity: 'ACTIVE',
             remark: $(`#rm${id}`).val()
         };
 
         let newTimeTableSlots = [];
         for (let i = 0; i < timeTableSlots.length; i++) {
-            if (!((timeTableSlots[i].subject_id === timeTableSlot.subject_id) && (timeTableSlots[i].batch_id === timeTableSlot.batch_id)
-                && Date.parse(timeTableSlots[i].start_at) === Date.parse(timeTableSlot.start_at) && Date.parse(timeTableSlots[i].end_at) === Date.parse(timeTableSlot.end_at))) {
-                console.log(" hhhheheheh")
-                //todo
+
+            let subjectIdComparison = timeTableSlots[i].subject_id === timeTableSlot.subject_id;
+            let batchIdComparison = timeTableSlots[i].batch_id === timeTableSlot.batch_id;
+            let startDateComparison = Math.sign((Date.parse(timeTableSlots[i].start_at) - Date.parse(timeTableSlot.start_at))) === 0;
+            let endDateComparison = Math.sign((Date.parse(timeTableSlots[i].end_at) - Date.parse(timeTableSlot.end_at))) === 0;
+
+            let logicValue = subjectIdComparison && batchIdComparison && startDateComparison && endDateComparison;
+            if (!logicValue) {
                 let timeTableSlot = {
                     timeTable_id: '',
                     timeTable_code: '',
@@ -478,7 +502,6 @@
             }
         }
         timeTableSlots = newTimeTableSlots;
-        allTimeTableSlotValidate()
     }
 
 </script >
