@@ -4,10 +4,14 @@ import lk.real_way_institute.asset.batch.entity.Batch;
 import lk.real_way_institute.asset.batch.service.BatchService;
 import lk.real_way_institute.asset.batch_exam.entity.BatchExam;
 import lk.real_way_institute.asset.batch_exam.service.BatchExamService;
+import lk.real_way_institute.asset.batch_student_exam_result.entity.BatchStudentExamResult;
 import lk.real_way_institute.asset.common_asset.model.TwoDate;
+import lk.real_way_institute.asset.common_asset.model.enums.AttendanceStatus;
+import lk.real_way_institute.asset.common_asset.model.enums.ResultGrade;
 import lk.real_way_institute.asset.payment.entity.Payment;
 import lk.real_way_institute.asset.payment.service.PaymentService;
 import lk.real_way_institute.asset.report.model.BatchAmount;
+import lk.real_way_institute.asset.report.model.BatchExamResultStudent;
 import lk.real_way_institute.asset.report.model.StudentAmount;
 import lk.real_way_institute.asset.student.entity.Student;
 import lk.real_way_institute.asset.student.service.StudentService;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +50,7 @@ public class ReportController {
     this.batchService = batchService;
     this.studentService = studentService;
   }
+
   private String commonIncomeReport(Model model, LocalDate startDate, LocalDate endDate) {
     LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDay(startDate);
     LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDay(endDate);
@@ -71,7 +77,7 @@ public class ReportController {
       batchAmount.setBatch(batchService.findById(x.getId()));
       batchAmounts.add(batchAmount);
     });
-    List< StudentAmount >  studentAmounts = new ArrayList<>();
+    List< StudentAmount > studentAmounts = new ArrayList<>();
     students.stream().distinct().collect(Collectors.toList()).forEach(x -> {
       List< Payment > studentPayments =
           payments.stream().filter(y -> y.getBatchStudent().getStudent().equals(x)).collect(Collectors.toList());
@@ -107,21 +113,184 @@ public class ReportController {
 
   @GetMapping( "/batchExam" )
   public String batchExam(Model model) {
-   List<BatchExam> batchExams = batchExamService.
-    return commonExam(model, LocalDate.now(), LocalDate.now());
+    LocalDate today = LocalDate.now();
+
+    LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDayWithOutNano(today);
+    LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDayWithOutNano(today.minusDays(7));
+    List< BatchExam > batchExams = batchExamService.findByStartAtBetween(startDateTime, endDateTime);
+    String message = "This report is belongs from " + today.minusDays(7) + " to " + today;
+    return commonExam(model, batchExams, message);
   }
 
   @PostMapping( "/batchExam" )
   public String batchExam(@ModelAttribute TwoDate twoDate, Model model) {
+    LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDayWithOutNano(twoDate.getStartDate());
+    LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDayWithOutNano(twoDate.getEndDate());
+    List< BatchExam > batchExams;
+    if ( twoDate.getId() == null ) {
+      batchExams = batchExamService.findByStartAtBetween(startDateTime,
+                                                         endDateTime);
+    } else {
+      Batch batch = batchService.findById(twoDate.getId());
+      batchExams = batchExamService.findByStartAtBetweenAndBatch(startDateTime,
+                                                                 endDateTime, batch);
+      model.addAttribute("batchDetail", batch);
+    }
 
-    return commonExam(model, );
+    String message = "This report is belongs from " + twoDate.getStartDate() + " to " + twoDate.getEndDate();
+    return commonExam(model, batchExams, message);
   }
-private String commonExam(Model model, List< BatchExam > batchExams, String message){
+
+  private String commonExam(Model model, List< BatchExam > batchExams, String message) {
+    List< BatchExamResultStudent > batchExamResultStudents = new ArrayList<>();
+    for ( BatchExam batchExam : batchExams ) {
+      BatchExamResultStudent batchExamResultStudent = new BatchExamResultStudent();
+      batchExamResultStudent.setBatchExam(batchExam);
+      batchExamResultStudent.setBatch(batchService.findById(batchExam.getBatch().getId()));
+      List< BatchStudentExamResult > batchStudentExamResults =
+          batchExamService.findById(batchExam.getId()).getBatchStudentExamResults();
+
+      List<BatchStudentExamResult> presentBatchStudentExamResults = batchStudentExamResults.stream().filter(x -> x.getAttendanceStatus().equals(AttendanceStatus.PRE)).collect(Collectors.toList());
+      batchExamResultStudent.setAttendCount(presentBatchStudentExamResults.size());
+      List< Student > presentStudents = new ArrayList<>();
+      presentBatchStudentExamResults.forEach(x->presentStudents.add(studentService.findById(x.getBatchStudent().getStudent().getId())));
+      batchExamResultStudent.setAttendStudents(presentStudents);
+      List< Student > absentStudents = new ArrayList<>();
+      List<BatchStudentExamResult> absentBatchStudentExamResults = batchStudentExamResults.stream().filter(x -> x.getAttendanceStatus().equals(AttendanceStatus.AB)).collect(Collectors.toList());
+      absentBatchStudentExamResults.forEach(x->absentStudents.add(studentService.findById(x.getBatchStudent().getStudent().getId())));
+      batchExamResultStudent.setAbsentCount(absentBatchStudentExamResults.size());
+      batchExamResultStudent.setAbsentStudents(absentStudents);
 
 
+      List< Student > aPlusStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.AP);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> aPlusStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+      model.addAttribute("aPlusStudents", aPlusStudents);
+      batchExamResultStudent.setAPlusStudents(aPlusStudents);
+      List< Student > aStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.A);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> aStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+      model.addAttribute("aStudents", aStudents);
+      batchExamResultStudent.setAStudents(aStudents);
+      List< Student > aMinusStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.AM);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> aMinusStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+      model.addAttribute("aMinusStudents", aMinusStudents);
+      batchExamResultStudent.setAMinusStudents(aMinusStudents);
+      List< Student > bPlusStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.BP);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> bPlusStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+      model.addAttribute("bPlusStudents", bPlusStudents);
+      batchExamResultStudent.setBPlusStudents(bPlusStudents);
+      List< Student > bStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.B);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> bStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+      model.addAttribute("bStudents", bStudents);
+      batchExamResultStudent.setBStudents(bStudents);
+      List< Student > bMinusStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.BM);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> bMinusStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+      model.addAttribute("bMinusStudents", bMinusStudents);
+      batchExamResultStudent.setBMinusStudents(bMinusStudents);
+      List< Student > cPlusStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.CP);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> cPlusStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
 
+      batchExamResultStudent.setCPlusStudents(cPlusStudents);
+
+      List< Student > cStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.C);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> cStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+
+      batchExamResultStudent.setCStudents(cStudents);
+
+      List< Student > cMinusStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.CM);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> cMinusStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+
+      batchExamResultStudent.setCMinusStudents(cMinusStudents);
+
+      List< Student > dPlusStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.DP);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> dPlusStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+
+      batchExamResultStudent.setDPlusStudents(dPlusStudents);
+      List< Student > dStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.D);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> dStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+
+      batchExamResultStudent.setDStudents(dStudents);
+
+      List< Student > eStudents = new ArrayList<>();
+      batchStudentExamResults.stream().filter(x -> {
+        if ( x.getResultGrade() != null ) {
+          return x.getResultGrade().equals(ResultGrade.E);
+        } else {
+          return false;
+        }
+      }).collect(Collectors.toList()).forEach(batchStudentExamResult -> eStudents.add(studentService.findById(batchStudentExamResult.getBatchStudent().getStudent().getId())));
+
+      batchExamResultStudent.setEStudents(eStudents);
+      batchExamResultStudents.add(batchExamResultStudent);
+    }
+    model.addAttribute("batchExamResultStudents", batchExamResultStudents);
     model.addAttribute("message", message);
-  model.addAttribute("BatchExams", batchExamService.findAll());
-  return "report/batchExamReport";
-}
+    model.addAttribute("batchExams", batchExamService.findAll());
+    return "report/batchExamReport";
+  }
 }
