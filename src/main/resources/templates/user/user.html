@@ -13,11 +13,9 @@
     <div class="col-6" >
       <div class="form-row" >
         <a class="btn btn-success mr-2" data-th-href="${'/user/add'}" >
-          <i class="fa fa-user-plus"  ></i > &nbsp; Add User Employee</a >
-        <a class="btn btn-success mr-2" data-th-href="${'/user/teacherAdd'}" >
-          <i class="fa fa-user-plus"  ></i > &nbsp; Add User Teacher</a >
+          <i class="fa fa-user-plus" ></i > &nbsp; Add User Employee</a >
         <a class="btn btn-success mr-2" data-th-href="${'/user/studentAdd'}" >
-          <i class="fa fa-user-plus"  ></i > &nbsp; Add User Student</a >
+          <i class="fa fa-user-plus" ></i > &nbsp; Add User Student</a >
       </div >
     </div >
     <div class="col-3" ></div >
@@ -55,7 +53,6 @@
             <th data-th-text="${user.username}" ></th >
             <th >
               <span data-th-if="${user.employee != null}" data-th-text="${user.employee.name}" ></span >
-              <span data-th-if="${user.teacher != null}" data-th-text="${user.teacher.firstName}" ></span >
               <span data-th-if="${user.student != null}" data-th-text="${user.student.firstName}" ></span >
             </th >
             <th data-th-text="${user.enabled==true?'Active':'Blocked'}" ></th >
@@ -66,7 +63,7 @@
               <a class="btn btn-primary btn-sm" id="userEdit" data-th-href="${'/user/edit/' + user.id}" >
                 <i class="fa fa-edit" ></i >&nbsp;Edit</a >
               <a class="btn btn-danger btn-sm" id="userRemove" data-th-href="${'/user/remove/' + user.id}"
-                 data-th-if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                 data-th-if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" >
                 <i aria-hidden="true" class="fa fa-trash" ></i >Delete</a >
             </th >
           </tr >
