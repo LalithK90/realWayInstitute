@@ -90,7 +90,7 @@
 </div >
 
 <!--User add from-->
-<div class="container-fluid bg-dark formBorder" data-th-if="${employeeDetailShow==true}" id="userFormShow" >
+<div class="container-fluid  " data-th-if="${employeeDetailShow==true}" id="userFormShow" >
   <form id="formUser" data-th-action="${addStatus==true?'/user/save':'/user/update'}" data-th-object="${user}"
         class="form-horizontal" method="POST" autocomplete="false" >
     <div class="row" >
@@ -127,28 +127,6 @@
           </div >
         </div >
         <!--Teacher name-->
-        <div class="form-row" data-th-if="${user.teacher != null}" >
-          <div class="col-md-4" >
-            <label class="control-label" for="employee" >Teacher :</label >
-          </div >
-          <div class="col-md-8" >
-            <select class="form-control" data-th-field="*{teacher}" data-th-each="e : ${teacher}" name="teacher"
-                    required >
-              <option
-                    data-th-text="${e.firstName} + ${' '} + ${e.lastName} +${' - '} + ${e.nic}"
-                    data-th-value="${e.id}"
-              >Please select
-              </option >
-            </select >
-            <div data-th-if="${addStatus==false}" >
-              <strong >
-                <span data-th-text="${user.teacher.firstName} + ${' '} + ${user.teacher.lastName} +${' - '} + ${user.teacher.nic}" ></span >
-                <input type="hidden" data-th-field="*{teacher}" >
-              </strong >
-            </div >
-          </div >
-        </div >
-        <!--Teacher name-->
         <div class="form-row" data-th-if="${user.student != null}" >
           <div class="col-md-4" >
             <label class="control-label" for="employee" >Student :</label >
@@ -157,7 +135,7 @@
             <select class="form-control" data-th-field="*{student}" data-th-each="e : ${student}" name="student"
                     required >
               <option
-                    data-th-text="${e.firstName} + ${' '} + ${e.lastName} +${' - '} + ${e.mobile}"
+                    data-th-text="${e.name} +${' - '} + ${e.mobile}"
                     data-th-value="${e.id}"
               >Please select
               </option >

@@ -25,7 +25,7 @@ public class ApplicationCreateRestController {
     private final UserService userService;
     private final EmployeeService employeeService;
 
-
+a
     @Autowired
     public ApplicationCreateRestController(RoleService roleService, UserService userService,
                                            EmployeeService employeeService) {
@@ -37,7 +37,7 @@ public class ApplicationCreateRestController {
     @GetMapping( "/select/user" )
     public String saveUser() {
         //roles list start
-        String[] roles = {"ADMIN", "TEACHER","STUDENT","MANAGER","CASHIER","SECTION_HEAD"};
+        String[] roles = {"ADMIN", "STUDENT","MANAGER","CASHIER","SECTION_HEAD"};
         for ( String s : roles ) {
             Role role = new Role();
             role.setRoleName(s);
