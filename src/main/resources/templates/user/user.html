@@ -53,7 +53,7 @@
             <th data-th-text="${user.username}" ></th >
             <th >
               <span data-th-if="${user.employee != null}" data-th-text="${user.employee.name}" ></span >
-              <span data-th-if="${user.student != null}" data-th-text="${user.student.firstName}" ></span >
+              <span data-th-if="${user.student != null}" data-th-text="${user.student.name}" ></span >
             </th >
             <th data-th-text="${user.enabled==true?'Active':'Blocked'}" ></th >
             <th data-th-text="${{user.createdAt}}" ></th >

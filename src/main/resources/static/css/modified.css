@@ -1,5 +1,5 @@
 .border-left-primary {
-    border-left: 0.75rem solid rgb(37,57,123) !important;
+    border-left: 0.75rem solid rgb(37, 57, 123) !important;
 }
 
 .shadow {
@@ -9,18 +9,36 @@
 .shadow :hover {
     box-shadow: 0 0.65rem 2rem 0 rgb(58 59 69 / 15%) !important;
 }
-.border-left-primary :hover{
+
+.border-left-primary :hover {
     background: #5EBA47;
     transition: background-color 1000ms linear;
     cursor: pointer;
 }
+
 .text-gray-800 {
     color: rgb(25, 26, 35) !important;
 }
+
 .text-primary {
     color: rgb(23, 45, 111) !important;
 }
 
-#loginPage{
+#loginPage {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+
+body {
+    background: rgb(63, 251, 233);
+    background: radial-gradient(circle, rgba(63, 251, 233, 0.16290266106442575) 68%, rgba(87, 189, 208, 1) 100%);
+}
+
+#navBarLogo {
+    border: 2px solid #fff;
+    -moz-box-shadow: 10px 10px 5px #ccc;
+    -webkit-box-shadow: 10px 10px 5px #ccc;
+    box-shadow: 10px 10px 5px #ccc;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 5px;
 }
