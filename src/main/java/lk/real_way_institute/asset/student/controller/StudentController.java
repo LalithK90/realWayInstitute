@@ -110,7 +110,7 @@ public class StudentController implements AbstractController< Student, Integer >
     }
     studentService.persist(student);
     student.getBatchStudents().forEach(x -> {
-      if ( x.getBatch() != null ) {
+      if ( x.getBatch() != null && x.getStudent() == null ) {
         x.setStudent(student);
         batchStudentService.persist(x);
       }
