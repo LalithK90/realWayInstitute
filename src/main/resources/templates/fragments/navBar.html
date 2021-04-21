@@ -22,18 +22,18 @@
 
           <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER','ROLE_SECTION_HEAD','ROLE_STUDENT')" class="dropdown-item " href="/batch" >Batch
                                                                                                            Management</a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/batchExam	" > Exam
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER','ROLE_SECTION_HEAD')" class="dropdown-item " href="/batchExam	" > Exam
                                                                                                             Management </a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/employee" > Employee
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_ADMIN')" class="dropdown-item " href="/employee" > Employee
                                                                                                              Management </a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/role" >Role
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_ADMIN')" class="dropdown-item " href="/role" >Role
                                                                                                            Management</a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/student" > Student
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER','ROLE_SECTION_HEAD','ROLE_STUDENT')" class="dropdown-item " href="/student" > Student
                                                                                                               Management</a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/subject" >Subject
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER','ROLE_SECTION_HEAD','ROLE_STUDENT')" class="dropdown-item " href="/subject" >Subject
                                                                                                                      Management</a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/timeTable" >Time Table Management </a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/user" >User
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER','ROLE_SECTION_HEAD')" class="dropdown-item " href="/timeTable" >Time Table Management </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_ADMIN')" class="dropdown-item " href="/user" >User
                                                                                                                      Management</a >
         </div >
       </li >
@@ -43,15 +43,15 @@
           Transaction
         </a >
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2" >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/subject/add" >New
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER')" class="dropdown-item " href="/subject/add" >New
                                                                                                                Subject</a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/employee/add	" > New
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_ADMIN')" class="dropdown-item " href="/employee/add	" > New
                                                                                                                    Employee </a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/payment/needToPay	" >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER')" class="dropdown-item " href="/payment/needToPay	" >
             New Payment </a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/role/add	" >New System
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_ADMIN')" class="dropdown-item " href="/role/add	" >New
                                                                                                               Role</a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/user/add	" > New
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_ADMIN')" class="dropdown-item " href="/user/add	" > New
                                                                                                                User </a >
 
         </div >
@@ -60,9 +60,11 @@
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false" > Reports </a >
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3" >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/report/" ></a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/employee" ></a >
-          <a data-sec-authorize="hasAnyAuthority('','')" class="dropdown-item " href="/report/" > </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER')" class="dropdown-item " href="/report/income" >Income</a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER')" class="dropdown-item " href="/employee" >All Employee</a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_SECTION_HEAD')" class="dropdown-item " href="/report/batchExam" > Exam Report</a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_SECTION_HEAD')" class="dropdown-item " href="/student" >Student</a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_SECTION_HEAD')" class="dropdown-item " href="/subject" >Subject</a >
         </div >
       </li >
     </ul >
