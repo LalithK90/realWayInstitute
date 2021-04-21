@@ -142,7 +142,7 @@
             </select >
             <div data-th-if="${addStatus==false}" >
               <strong >
-                <span data-th-text="${user.student.firstName} + ${' '} + ${user.student.lastName} +${' - '} + ${user.student.mobile}" ></span >
+                <span data-th-text="${user.student.name} +${' - '} + ${user.student.mobile}" ></span >
               </strong >
               <input type="hidden" data-th-field="*{student}" >
             </div >

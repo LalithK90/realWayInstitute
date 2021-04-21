@@ -70,7 +70,7 @@
             <label data-th-for="${'employee'}" class="control-label" >Main Instructor Name :</label >
             <div class="pt-3" >
               <select id="employee" class="form-control" data-th-field="*{employee}" required >
-                <option value="" >Select the Teacher</option >
+                <option value="" >Select The Teacher</option >
                 <option data-th-each="employee : ${employees}"
                         data-th-text="${employee.name}"
                         data-th-value="${employee.id}" ></option >

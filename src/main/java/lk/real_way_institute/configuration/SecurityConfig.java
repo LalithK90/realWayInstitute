@@ -71,20 +71,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable();
-    http.authorizeRequests().antMatchers("/").permitAll();
+   /* http.csrf().disable();
+    http.authorizeRequests().antMatchers("/").permitAll();*/
 
 
-   /* http
+    http
         .authorizeRequests(
             authorizeRequests ->
                 authorizeRequests
-                    //Anytime users can access without login
-                    //to see actuator details
                     .antMatchers(ALL_PERMIT_URL).permitAll()
-                    //this is used the normal admin to give access every url mapping
-                    .antMatchers("/category/**").hasAnyRole("ADMIN", "MANAGER")
-//todo: security configuration
+                    //"ADMIN", "STUDENT","MANAGER","CASHIER","SECTION_HEAD"
+                    .antMatchers("/batch/**").hasAnyRole( "MANAGER","CASHIER","SECTION_HEAD","STUDENT")
+                    .antMatchers("/batchExam/**").hasAnyRole("MANAGER","SECTION_HEAD","STUDENT")
+                    .antMatchers("/batchStudent/**").hasAnyRole( "MANAGER","CASHIER","SECTION_HEAD","STUDENT")
+                    .antMatchers("/batchStudentExamResult/**").hasAnyRole("MANAGER","SECTION_HEAD","STUDENT")
+                    .antMatchers("/employee/**").hasAnyRole( "MANAGER","ADMIN")
+                    .antMatchers("/report/**").hasAnyRole( "MANAGER","CASHIER","SECTION_HEAD")
+                    .antMatchers("/role/**").hasAnyRole("MANAGER","ADMIN")
+                    .antMatchers("/student/**").hasAnyRole( "MANAGER","CASHIER","SECTION_HEAD","ADMIN")
+                    .antMatchers("/subject/**").hasAnyRole("MANAGER","CASHIER","SECTION_HEAD","STUDENT")
+                    .antMatchers("/timeTable/**").hasAnyRole( "MANAGER","CASHIER","SECTION_HEAD","STUDENT")
+                    .antMatchers("/user/**").hasAnyRole( "MANAGER","ADMIN")
+
                     .anyRequest()
                     .authenticated())
         // Login form
@@ -120,7 +128,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionRegistry(sessionRegistry()))
         //Cross site disable
         .csrf(AbstractHttpConfigurer::disable)
-        .exceptionHandling();*/
+        .exceptionHandling();
 
   }
 }

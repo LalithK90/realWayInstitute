@@ -17,7 +17,7 @@
     <h1 >Course Management</h1 >
   </div >
   <div class="col-4" >
-    <a href="/batch/add" >
+    <a href="/batch/add" data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_SECTION_HEAD')">
       <button class="btn btn-primary" align="center" >Add new Course</button >
     </a >
   </div >
@@ -35,7 +35,7 @@
         <th >Course Name</th >
         <th >Teacher Name</th >
         <th >Instalment Date</th >
-        <th >Modify</th >
+        <th data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER','ROLE_SECTION_HEAD')">Modify</th >
       </tr >
       </thead >
       <tbody >
@@ -77,17 +77,17 @@
             </div >
           </div >
         </td >
-        <td >
+        <td data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER','ROLE_SECTION_HEAD')">
           <a data-th-href="${'/batch/view/'+ batch.id}" >
             <button type="button" class="btn btn-info" >View</button >
           </a >
-          <a data-th-href="${'/batch/edit/'+ batch.id}" >
+          <a data-th-href="${'/batch/edit/'+ batch.id}" data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_SECTION_HEAD')">
             <button type="button" class="btn btn-success" >Edit</button >
           </a >
-          <a data-th-href="${'/batch/delete/'+ batch.id}" >
+          <a data-th-href="${'/batch/delete/'+ batch.id}" data-sec-authorize="hasAnyAuthority('ROLE_MANAGER')">
             <button type="button" class="btn btn-danger" >Delete</button >
           </a >
-          <a data-th-href="${'/batchExam/add/'+ batch.id}" >
+          <a data-th-href="${'/batchExam/add/'+ batch.id}" data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_SECTION_HEAD')">
             <button type="button" class="btn btn-warning" >Add Exam</button >
           </a >
         </td >
