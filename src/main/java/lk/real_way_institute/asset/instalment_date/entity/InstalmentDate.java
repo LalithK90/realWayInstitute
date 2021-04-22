@@ -25,8 +25,6 @@ import java.util.List;
 @JsonFilter( "InstalmentDate" )
 public class InstalmentDate extends AuditEntity {
 
-  @Enumerated( EnumType.STRING )
-  private LiveDead liveDead;
 
   @DateTimeFormat( pattern = "yyyy-MM-dd" )
   private LocalDate date;

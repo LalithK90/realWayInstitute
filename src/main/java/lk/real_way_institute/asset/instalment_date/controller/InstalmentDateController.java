@@ -93,7 +93,7 @@ public class InstalmentDateController implements AbstractController< InstalmentD
   @GetMapping( "/active/{id}" )
   public String active(@PathVariable Integer id) {
     InstalmentDate instalmentDate = instalmentDateService.findById(id);
-    instalmentDate.setLiveDead(LiveDead.ACTIVE);
+   // instalmentDate.setLiveDead(LiveDead.ACTIVE);
     instalmentDateService.persist(instalmentDate);
     return "redirect:/instalmentDate/delete";
   }
