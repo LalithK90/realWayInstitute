@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,10 +56,10 @@ public class StudentController implements AbstractController< Student, Integer >
     model.addAttribute("student", student);
     model.addAttribute("addStatus", addStatus);
     model.addAttribute("liveDeads", LiveDead.values());
+    List< Batch > batches = batchService.findAll().stream().filter(x->x.getEndAt().isAfter(LocalDate.now())).collect(Collectors.toList());
     if ( student.getBatchStudents() == null ) {
-      model.addAttribute("batches", batchService.findAll());
+      model.addAttribute("batches", batches);
     } else {
-      List< Batch > batches = batchService.findAll();
       student.getBatchStudents().forEach(x -> batches.remove(x.getBatch()));
       model.addAttribute("batches", batches);
     }

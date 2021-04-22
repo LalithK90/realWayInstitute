@@ -10,6 +10,7 @@ import lk.real_way_institute.asset.batch.entity.enums.Grade;
 import lk.real_way_institute.asset.batch.service.BatchService;
 import lk.real_way_institute.asset.batch_student.service.BatchStudentService;
 import lk.real_way_institute.asset.common_asset.model.enums.LiveDead;
+import lk.real_way_institute.asset.employee.entity.enums.Designation;
 import lk.real_way_institute.asset.employee.service.EmployeeService;
 import lk.real_way_institute.asset.instalment_date.entity.InstalmentDate;
 import lk.real_way_institute.asset.student.service.StudentService;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +44,8 @@ public class BatchController implements AbstractController< Batch, Integer > {
 
   public BatchController(BatchService batchService, EmployeeService employeeService,
                          MakeAutoGenerateNumberService makeAutoGenerateNumberService,
-                         SubjectService subjectService, StudentService studentService, BatchStudentService batchStudentService) {
+                         SubjectService subjectService, StudentService studentService,
+                         BatchStudentService batchStudentService) {
     this.batchService = batchService;
     this.employeeService = employeeService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
@@ -56,19 +59,24 @@ public class BatchController implements AbstractController< Batch, Integer > {
   public String findAll(Model model) {
     model.addAttribute("batches",
                        batchService.findAll());
+    //    valid batch witharak pennana kiwwoth line number 63 idala 66 ta un comment karanna
+    //    itapasse line number 60-61 comment karanna
+    /*
+    model.addAttribute("batches",
+                       batchService.findAll().stream().filter(x->x.getEndAt().isAfter(LocalDate.now())).collect(Collectors.toList()));
+    */
+
     return "batch/batch";
   }
 
   private String commonMethod(Model model, Batch batch, boolean addStatus) {
-    // model.addAttribute("employees",employeeService.findByDesignation(Designation.INSTRUCTOR));
-    //todo : for demo remove above ones and delete below one
-    model.addAttribute("employees", employeeService.findAll());
+    model.addAttribute("employees", employeeService.findByDesignation(Designation.INSTRUCTOR));
     model.addAttribute("batch", batch);
     model.addAttribute("addStatus", addStatus);
     model.addAttribute("liveDeads", LiveDead.values());
-    if ( batch.getSubjects()==null ){
-    model.addAttribute("subjects", subjectService.findAll());
-    }else {
+    if ( batch.getSubjects() == null ) {
+      model.addAttribute("subjects", subjectService.findAll());
+    } else {
       List< Subject > subjects = subjectService.findAll();
       batch.getSubjects().forEach(subjects::remove);
       model.addAttribute("subjects", subjects);
@@ -122,7 +130,7 @@ public class BatchController implements AbstractController< Batch, Integer > {
       }
     }
 
-    if ( batch.getInstalmentDates()!= null ) {
+    if ( batch.getInstalmentDates() != null ) {
       List< InstalmentDate > instalmentDates = new ArrayList<>();
       batch.getInstalmentDates().forEach(x -> {
         x.setBatch(batch);
