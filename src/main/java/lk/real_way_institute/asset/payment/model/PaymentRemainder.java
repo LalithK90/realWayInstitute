@@ -24,6 +24,4 @@ public class PaymentRemainder {
 
   private String message;
 
-
-
 }
