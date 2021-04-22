@@ -92,6 +92,11 @@ public class BatchStudentExamResultController {
           x.setCode("SSER" + makeAutoGenerateNumberService.numberAutoGen(null));
         }
       }
+      if(x.getAttendanceStatus().equals(AttendanceStatus.AB)){
+        x.setMark(0);
+        x.setResultGrade(ResultGrade.E);
+      }
+
       batchStudentExamResultService.persist(x);
     });
   BatchExam batchExamDb =   batchExamService.findById(batchExam.getId());
