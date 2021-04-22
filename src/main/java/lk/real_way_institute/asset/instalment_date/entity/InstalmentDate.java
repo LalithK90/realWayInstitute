@@ -26,6 +26,9 @@ import java.util.List;
 public class InstalmentDate extends AuditEntity {
 
 
+  @Enumerated( EnumType.STRING )
+  private LiveDead liveDead;
+
   @DateTimeFormat( pattern = "yyyy-MM-dd" )
   private LocalDate date;
 

@@ -34,14 +34,16 @@ public class InstalmentDateService implements AbstractService< InstalmentDate, I
   }
 
   public InstalmentDate persist(InstalmentDate instalmentDate) {
-
+if ( instalmentDate.getId() ==null ){
+  instalmentDate.setLiveDead(LiveDead.ACTIVE);
+}
     return intalmentDateDao.save(instalmentDate);
   }
 
   public boolean delete(Integer id) {
-//    InstalmentDate intalmentDate = intalmentDateDao.getOne(id);
-//    intalmentDate.setLiveDead(LiveDead.STOP);
-//    intalmentDateDao.save(intalmentDate);
+    InstalmentDate intalmentDate = intalmentDateDao.getOne(id);
+    intalmentDate.setLiveDead(LiveDead.STOP);
+    intalmentDateDao.save(intalmentDate);
     return false;
   }
 
