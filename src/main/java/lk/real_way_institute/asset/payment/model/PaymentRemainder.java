@@ -18,8 +18,10 @@ public class PaymentRemainder {
   private Student student;
   private String batchName;
   private BigDecimal amount;
+
   @DateTimeFormat( pattern = "yyyy-MM-dd" )
   private LocalDate date;
+
   private String message;
 
 }
